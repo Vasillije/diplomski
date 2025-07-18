@@ -1,0 +1,46 @@
+
+<div class="background">
+    <div class="center">
+        <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef> USERNAME </th>
+            <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> NAME </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="lastname">
+            <th mat-header-cell *matHeaderCellDef> LASTNAME </th>
+            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> EMAIL </th>
+            <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="penaltyPoints">
+            <th mat-header-cell *matHeaderCellDef> PENALTY POINTS </th>
+            <td mat-cell *matCellDef="let element"> {{element.penaltyPoints}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="unblock">
+            <th mat-header-cell *matHeaderCellDef> UNBLOCK </th>
+            <td mat-cell *matCellDef="let element">
+              <button  mat-button class="tablebtn" (click)="unblock(element)">UNBLOCK</button>
+            </td>
+          </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+
+<div class="background">
+    <div class="center">
+        <table mat-table [dataSource]="dataSource">
+            
+            <ng-container matColumnDef="complaintId">
+                <th mat-header-cell *matHeaderCellDef> COMPLAINT ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.complaintId}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="complaintContent">
+                <th mat-header-cell *matHeaderCellDef> COMPLAINT CONTENT </th>
+                <td mat-cell *matCellDef="let element"> {{element.complaintContent}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="answerId">
+                <th mat-header-cell *matHeaderCellDef> ABSWER ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.answerId}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="answerContent">
+                <th mat-header-cell *matHeaderCellDef> ANSWER CONTENT </th>
+                <td mat-cell *matCellDef="let element"> {{element.answerContent}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nutritionistId">
+                <th mat-header-cell *matHeaderCellDef> NUTRITIONIST ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.nutritionistId}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="patientId">
+                <th mat-header-cell *matHeaderCellDef> PATIENT ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.patientId}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="appointmentId">
+                <th mat-header-cell *matHeaderCellDef> APPOINTMENT ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.appointmentId}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+    </div>
+</div>

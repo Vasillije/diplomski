@@ -1,0 +1,39 @@
+.toolbar {
+    /* background-color: rgb(247, 247, 245); */
+    background-color: rgb(13, 19, 54);
+    display: flex;
+    justify-content: space-between;  
+    align-items: center; 
+    padding: 0 16px; 
+    border-bottom: 1px solid rgb(13, 19, 54);
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .loginButton {
+    background-color: rgb(247, 247, 245);
+    margin-left: auto; 
+    margin-right: 5%;
+    color: rgb(13, 19, 54) !important;
+  }
+
+  .registerButton {
+    background-color: rgb(247, 247, 245);
+    margin-left: auto; 
+    margin-right: 5%;
+    color: rgb(3, 19, 54) !important;
+  }
+  
+  .NUTRITIONIST{
+    padding: auto;
+    margin-left: 0.7%;
+    margin-bottom: 8.2%;
+    font-size:large ;
+    font-weight: bolder;
+    color: rgb(247, 247, 245) !important;
+  }
+  router-outlet{
+    background: linear-gradient(to bottom, rgb(221, 234, 250), rgb(255, 255, 255));
+  }
+

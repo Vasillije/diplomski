@@ -1,5 +1,6 @@
 package com.sportscenter.nutritionist.controllers;
 
+import com.sportscenter.nutritionist.dto.appointments.AppointmentsByDateDto;
 import com.sportscenter.nutritionist.dto.appointments.BookAppointmentDto;
 import com.sportscenter.nutritionist.dto.appointments.CreateAppointmentDto;
 import com.sportscenter.nutritionist.dto.appointments.PastBookedAppointmentsByNutritionistIdDto;
@@ -93,6 +94,11 @@ public class AppointmentController {
     @GetMapping("getPastBookedAppointmentsByNutritionistId/{id}")
     public ResponseEntity<List<PastBookedAppointmentsByNutritionistIdDto>> getPastBookedAppointments(@PathVariable int id){
         return new ResponseEntity<>(appointmentService.getPastBookedAppointmentsByNutritionistId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("getAppointmentsByDate/{date}")
+    public ResponseEntity<List<AppointmentsByDateDto>> getAppointmentsByDate(@PathVariable String date){
+        return new ResponseEntity<>(appointmentService.getAppointmentsByDate(date), HttpStatus.OK);
     }
 
 }

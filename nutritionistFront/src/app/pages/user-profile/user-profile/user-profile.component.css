@@ -1,0 +1,62 @@
+.background {
+    height: 110vh;
+    width: 100%;
+    background-color: rgb(247, 247, 245);
+    position: relative;
+}
+
+.background1 {
+    margin-top: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    position: absolute; 
+    z-index: 1;
+}
+
+h2{
+    margin: 10px 0;
+    text-align: center;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 30px;
+    color: white;
+}
+
+.center-left, .center, .center-right {
+    margin-top: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;   /* Raspoređuje elemente vertikalno */
+    justify-content: flex-start; /* Početno poravnanje elemenata od vrha */
+    align-items: center;       /* Centriranje elemenata horizontalno */
+}
+mat-form-field {
+    width: 90%;  /* Dajemo form fieldovima da zauzmu celu širinu */
+    margin: 3px 0; /* Malo prostora između svakog form field-a */
+    margin-left: 4%;
+}
+
+button.btn {
+    margin-top: 10px; /* Prostor iznad dugmeta */
+    width: 90%;      /* Dugme zauzima celu širinu */
+    margin-left: 4%;
+    background-color: rgb(13, 19, 54);
+    color: rgb(247, 247, 245);
+}
+
+.finish{
+    background-color:rgb(247, 247, 245);
+    color: rgb(13, 19, 54);
+    width: 120px;
+    margin-top: 28px;
+    float: right;
+    margin-right: 35px;
+}
+
+.img{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 0;
+    filter: brightness(0.6);
+}

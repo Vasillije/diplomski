@@ -1,0 +1,19 @@
+<div class="background">
+    <div class="center">
+            <img src="user.png" class="user-img" alt="User">
+        <div class="frm">
+            <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Username</mat-label>
+                    <input matInput type="text" name="username" ngModel>
+                </mat-form-field>
+                    
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" name="password" ngModel>
+                </mat-form-field>
+                <button mat-button class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="background">
+    <div class="center">
+        <img src="register1.jpg" class="register-img" alt="Register">
+    <div class="frm">
+        <h1><b>REGISTER</b></h1>
+            <form #registerForm="ngForm" (ngSubmit)="register(registerForm.value)">
+                <mat-form-field class="field">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="text" name="email" ngModel required="true">
+                </mat-form-field>
+
+                <mat-form-field class="field">
+                    <mat-label>Username</mat-label>
+                    <input matInput type="text" name="username" ngModel required="true">
+                </mat-form-field>
+                    
+                <mat-form-field class="field">
+                    <mat-label>Password</mat-label>
+                    <input matInput type="password" name="password" ngModel required="true">
+                </mat-form-field>
+
+                <mat-form-field class="field">
+                    <mat-label>Retype Password</mat-label>
+                    <input matInput type="password" name="retypedPassword" ngModel required="true">
+                </mat-form-field>
+                <button mat-button class="btn">Register</button>
+            </form>
+            </div>
+    </div>
+</div>

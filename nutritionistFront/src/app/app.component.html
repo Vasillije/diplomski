@@ -1,0 +1,20 @@
+<mat-toolbar class="toolbar">
+  <div>
+    <button mat-button routerLink="" class="NUTRITIONIST">NUTRITIONIST APP</button>
+  </div>
+  <div>
+      
+    <div *ngIf="loginService.show == 0">
+      <button (click)="redirectToRegister()" mat-button class="registerButton">register</button>
+      <button (click)="redirectToLogin()" mat-button class="loginButton">login</button>
+    </div>
+      
+    
+    <div *ngIf="loginService.show == 1">
+      <button (click)="logout()" mat-button class="loginButton">logout</button>      
+  </div>
+  </div>
+  
+</mat-toolbar>
+
+<router-outlet></router-outlet>

@@ -14,4 +14,5 @@ public interface AppointmentService {
     public void cancelAppointmentPatient(int appointmentId);
     public void cancelAppointmentNutritionist(int appointmentId);
     public List<PastBookedAppointmentsByNutritionistIdDto> getPastBookedAppointmentsByNutritionistId(int id);
+    public List<AppointmentsByDateDto> getAppointmentsByDate(String date);
 }

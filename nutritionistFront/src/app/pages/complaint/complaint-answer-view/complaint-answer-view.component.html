@@ -1,0 +1,12 @@
+<div class="background">
+    <div class = "center">
+        <div class="frm">
+            <form #complaintForm="ngForm" (ngSubmit)="answerComplaint(complaintForm.value)">
+                <mat-form-field class="inp">
+                    <mat-label>Answer</mat-label>
+                    <textarea matInput name="answer" ngModel></textarea>
+                  </mat-form-field>
+                <button mat-button class="btn">Submit</button>
+            </form>
+    </div>
+</div>

@@ -1,11 +1,8 @@
 package com.sportscenter.nutritionist.service.impl;
 
 import com.sportscenter.nutritionist.dto.appointments.*;
-import com.sportscenter.nutritionist.dto.users.NutritionistsForBlockDto;
 import com.sportscenter.nutritionist.email.EmailSenderService;
-import com.sportscenter.nutritionist.exceptions.AppointmentOverlapException;
 import com.sportscenter.nutritionist.models.Appointment;
-import com.sportscenter.nutritionist.models.NutritionistMealPlan;
 import com.sportscenter.nutritionist.models.UserEntity;
 import com.sportscenter.nutritionist.repository.AppointmentRepository;
 import com.sportscenter.nutritionist.repository.UserRepository;
@@ -13,6 +10,8 @@ import com.sportscenter.nutritionist.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -272,6 +271,40 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             dtos.add(dto);
         }
+        return dtos;
+    }
+
+    @Override
+    public List<AppointmentsByDateDto> getAppointmentsByDate(String date){
+        List<Appointment> appointments = appointmentRepository.findAll();
+        List<AppointmentsByDateDto> dtos = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date realDate;
+        try {
+            realDate = sdf.parse(date);
+        } catch (ParseException e) {
+            throw new RuntimeException("Nevalidan format datuma, očekuje se yyyy-MM-dd");
+        }
+
+        for (Appointment a : appointments) {
+            String appointmentDateStr = sdf.format(a.getDateAndTime());
+            String filterDateStr = sdf.format(realDate);
+
+            if (appointmentDateStr.equals(filterDateStr)) {
+                AppointmentsByDateDto dto = new AppointmentsByDateDto();
+                if(a.getPatientId() != 0) {
+                    UserEntity patient = userRepository.findById(a.getPatientId()).orElse(null);
+                    dto.setPatientName(patient.getName());
+                    dto.setPatientLastName(patient.getLastname());
+
+                }
+                dto.setAppointmentId(a.getId());
+                dto.setDate(a.getDateAndTime());
+                dto.setDuration(a.getDuration());
+                dtos.add(dto);
+            }
+        }
+
         return dtos;
     }
 }

@@ -1,0 +1,68 @@
+mat-form-field{
+    width : 300px;
+    margin-left : 15px;
+    margin-top: 100px;
+}
+
+.background{
+    height: 100vh;
+    width: 100%;
+    background-color: rgb(247, 247, 245);
+}
+
+h1{
+    margin-top: -80px;
+    padding-top: 150px;
+    text-align: center;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 30px;
+}
+
+.center1 {
+    position: absolute; 
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.polje{
+    margin-top: 20px; 
+}
+
+.btn{
+    margin-left: 880px;
+    background-color: rgb(13, 19, 54);
+    color: rgb(247, 247, 245);
+}
+
+table {
+    width: 100%;
+    background-color: rgb(247, 247, 245);
+}
+
+.mat-mdc-header-row {
+  background-color: rgb(13, 19, 54) !important;
+  margin-left: 10px !important;
+}
+
+.mat-mdc-header-cell {
+  color: rgb(247, 247, 245) !important;
+} 
+
+.mat-mdc-body {
+  border: none !important;
+} 
+
+
+.mat-mdc-cell {
+  border: none !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
+  /* background-color: rgb(145, 255, 153); */
+  background-color: rgb(211, 211, 211);
+}
+  

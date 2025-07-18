@@ -1,0 +1,28 @@
+.background{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.first .second .third .fourth .fifth .sixth .seventh{
+    display: flex;
+    flex-direction: column;
+    margin: 10px !important;
+}
+
+.form{
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+}
+
+.btn{
+    margin-top: 70px;
+    width: 170px;
+    background-color: rgb(13, 19, 54);
+    color: white;
+}
+
+h1{
+    margin-top: 60px;
+}
