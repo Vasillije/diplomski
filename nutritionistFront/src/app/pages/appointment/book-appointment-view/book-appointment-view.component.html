@@ -1,5 +1,30 @@
 <div class="background">
+    <div class="center1" id="centerDiv">
+        <form #filterForm="ngForm" (ngSubmit)="filterByDate(filterForm.value)">
+        <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter"  [min]="minDate" name="appointmentDate" ngModel> 
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <button mat-button class="btn" id="dateBtn">FILTER</button>
+        </form>
+        <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)">
+        <mat-form-field class="inputName">
+            <mat-label>Nutritionist's name</mat-label>
+            <input matInput type="text" name="username" ngModel>
+        </mat-form-field>
+        <button mat-button class="btn" id="dateBtn">FILTER</button>
+        </form>
+    </div>
+    <div class="buttons">
+        <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
+        <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
+        <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
+        <button mat-button class="btn" (click)="getAvailableAppointments()" >RESET</button>
+    </div>
     <div class="center">
+        <div class="table-container">
         <table mat-table [dataSource]="dataSource">
     
         <ng-container matColumnDef="date">
@@ -29,13 +54,9 @@
             </td>
           </ng-container>
     
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" sticky></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <div class="buttons">
-            <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
-            <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
-            <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
         </div>
     </div>
 </div>

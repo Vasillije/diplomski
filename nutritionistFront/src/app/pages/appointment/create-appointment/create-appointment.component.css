@@ -41,6 +41,7 @@ h1{
 table {
     width: 100%;
     background-color: rgb(247, 247, 245);
+    margin-top: 25px;
 }
 
 .mat-mdc-header-row {

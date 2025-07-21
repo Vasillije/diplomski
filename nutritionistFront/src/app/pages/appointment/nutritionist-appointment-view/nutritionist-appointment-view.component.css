@@ -7,7 +7,7 @@
 table {
   width: 100%;
   background-color: rgb(247, 247, 245);
-  border-collapse: collapse; /* Dodaj za bolje ponašanje tabele */
+  border-collapse: collapse;
 }
 
 
@@ -56,7 +56,6 @@ table {
 }
 
 ::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
-  /* background-color: rgb(145, 255, 153); */
   background-color: rgb(211, 211, 211);
 }
 
@@ -76,4 +75,9 @@ table {
   width: 80%;
   margin-left: 5%;
   margin-top: 5%;
+}
+
+.inputName{
+  width: 240px;
+  margin-left: 20px;
 }

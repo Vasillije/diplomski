@@ -113,6 +113,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getUsersPenaltyPoints(id) ,HttpStatus.OK);
     }
 
+    @GetMapping("getIsBlocked/{id}")
+    public ResponseEntity<Boolean> getIsBlocked(@PathVariable int id){
+        return new ResponseEntity<Boolean>(userService.getIsBlocked(id) ,HttpStatus.OK);
+    }
+
     @PostMapping("getHasLogged")
     public ResponseEntity<Boolean> getHasLogged(@RequestBody int userId){
         return new ResponseEntity<>(userService.getHasLogged(userId) ,HttpStatus.OK);

@@ -101,6 +101,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean getIsBlocked(int id){
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return user.isBlocked();
+    }
+
+    @Override
     public Boolean getHasLogged(int userId) {
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return user.isHasLogged();

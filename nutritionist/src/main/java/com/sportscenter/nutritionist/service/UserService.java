@@ -12,6 +12,7 @@ public interface UserService {
     public HealthInfoDto changeHealthInfo(HealthInfoDto dto);
     public ContactInfoDto changeContactInfo(ContactInfoDto dto);
     public int getUsersPenaltyPoints(int id);
+    public Boolean getIsBlocked(int id);
     public Boolean getHasLogged(int userId);
     public void hasLoggedTrue(int userId);
     public List<NutritionistsForBlockDto> nutritionistsForBlock();

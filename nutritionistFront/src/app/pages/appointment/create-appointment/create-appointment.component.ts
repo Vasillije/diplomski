@@ -25,6 +25,11 @@ export class CreateAppointmentComponent {
   patientFullName : string[] = [];
   date: Date | undefined;
 
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day !== 0 && day !== 6;
+  };
+
   constructor(private loginService : LoginService, private appointmentService : AppointmentService, private router : Router){}
   
   
@@ -86,22 +91,37 @@ export class CreateAppointmentComponent {
     );
    }
 
-   getAppointmentsByDate(date : string){
-    this.appointmentService.getAppointmentsByDate(date).subscribe(
-      (data) =>{
-        this.dataSource = data;
-      },
-      (error) =>{
-        alert("There was an error");
+  getAppointmentsByDate(date : string){
+  this.appointmentService.getAppointmentsByDate(date).subscribe(
+    (data) =>{
+      this.dataSource = data;
+      for(let i =0; i< this.dataSource.length; i++){
+        if(this.dataSource[i].patientName && this.dataSource[i].patientLastName){
+          this.patientFullName[i] = this.dataSource[i].patientName + " " + this.dataSource[i].patientLastName;
+        }
+
+         if(this.dataSource[i].duration == 20){
+          this.appointmentType[i] = 'CONSULTATION';
+        }
+        else if(this.dataSource[i].duration == 30){
+          this.appointmentType[i] = 'CONTROL';
+        }
+        else if(this.dataSource[i].duration == 60){
+          this.appointmentType[i] = 'EXAMINATION';
+        }
       }
+    },
+    (error) =>{
+      alert("There was an error");
+    }
     );
-   }
+  }
 
   onDateChange(event: any) {
     const date = new Date(event.value);
-  date.setDate(date.getDate() + 1);
-  const selectedDate = date.toISOString().split('T')[0];
-  this.getAppointmentsByDate(selectedDate);
+    date.setDate(date.getDate() + 1);
+    const selectedDate = date.toISOString().split('T')[0];
+    this.getAppointmentsByDate(selectedDate);
   }
 
 

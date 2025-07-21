@@ -19,6 +19,13 @@ export class BookAppointmentViewComponent {
   appointmentType : string[] = [];
   nutritionistFullName : string[] = [];
   displayedColumns: string[] = ['date', 'type', 'duration', 'nutritionist', 'book'];
+  minDate: Date = new Date(new Date().setDate(new Date().getDate() + 1));
+  allAppointments: PatientAppointmentDto[] = [];
+
+  myFilter = (d: Date | null): boolean => {
+    const day = (d || new Date()).getDay();
+    return day !== 0 && day !== 6;
+  };
 
   constructor(private appointmentService : AppointmentService, private router : Router, private loginService : LoginService,
     private userProfileService : UserProfileService){}
@@ -30,27 +37,16 @@ export class BookAppointmentViewComponent {
   getAvailableAppointments(){
     this.appointmentService.getAvailableAppointments().subscribe(
       (data) =>{
-        this.dataSource = data;
-        for(let i =0; i< this.dataSource.length; i++){
-          this.nutritionistFullName[i] = this.dataSource[i].nutritionistName + " " + this.dataSource[i].nutritionistLastName;
-          if(this.dataSource[i].duration == 20){
-            this.appointmentType[i] = 'CONSULTATION';
-          }
-          else if(this.dataSource[i].duration == 30){
-            this.appointmentType[i] = 'CONTROL';
-          }
-          else if(this.dataSource[i].duration == 60){
-            this.appointmentType[i] = 'EXAMINATION';
-          }
-        }
-        console.log(this.dataSource);
+        this.allAppointments = data;
+        this.dataSource = [...data];
+        this.mapData();
         this.sortByDate();
       },
       (error) =>
         alert(error.message)
     );
   }
-
+  
   bookAppointment(element: any) {
     var userDto : UserDto = {
       username: '',
@@ -102,18 +98,8 @@ export class BookAppointmentViewComponent {
     this.appointmentService.getAvailableAppointments().subscribe(
       (data) => {
         this.dataSource = data.filter((dto: PatientAppointmentDto) => dto.duration === 60);
-        for(let i =0; i< this.dataSource.length; i++){
-          this.nutritionistFullName[i] = this.dataSource[i].nutritionistName + " " + this.dataSource[i].nutritionistLastName;
-          if(this.dataSource[i].duration == 20){
-            this.appointmentType[i] = 'CONSULTATION';
-          }
-          else if(this.dataSource[i].duration == 30){
-            this.appointmentType[i] = 'CONTROL';
-          }
-          else if(this.dataSource[i].duration == 60){
-            this.appointmentType[i] = 'EXAMINATION';
-          }
-        }
+        this.mapData();
+        this.sortByDate();
       },
       (error) => {
         alert(error.message);
@@ -125,18 +111,8 @@ export class BookAppointmentViewComponent {
     this.appointmentService.getAvailableAppointments().subscribe(
       (data) => {
         this.dataSource = data.filter((dto: PatientAppointmentDto) => dto.duration === 30);
-        for(let i =0; i< this.dataSource.length; i++){
-          this.nutritionistFullName[i] = this.dataSource[i].nutritionistName + " " + this.dataSource[i].nutritionistLastName;
-          if(this.dataSource[i].duration == 20){
-            this.appointmentType[i] = 'CONSULTATION';
-          }
-          else if(this.dataSource[i].duration == 30){
-            this.appointmentType[i] = 'CONTROL';
-          }
-          else if(this.dataSource[i].duration == 60){
-            this.appointmentType[i] = 'EXAMINATION';
-          }
-        }
+        this.mapData();
+        this.sortByDate();
       },
       (error) => {
         alert(error.message);
@@ -148,18 +124,8 @@ export class BookAppointmentViewComponent {
     this.appointmentService.getAvailableAppointments().subscribe(
       (data) => {
         this.dataSource = data.filter((dto: PatientAppointmentDto) => dto.duration === 20);
-        for(let i =0; i< this.dataSource.length; i++){
-          this.nutritionistFullName[i] = this.dataSource[i].nutritionistName + " " + this.dataSource[i].nutritionistLastName;
-          if(this.dataSource[i].duration == 20){
-            this.appointmentType[i] = 'CONSULTATION';
-          }
-          else if(this.dataSource[i].duration == 30){
-            this.appointmentType[i] = 'CONTROL';
-          }
-          else if(this.dataSource[i].duration == 60){
-            this.appointmentType[i] = 'EXAMINATION';
-          }
-        }
+        this.mapData();
+        this.sortByDate();
       },
       (error) => {
         alert(error.message);
@@ -167,19 +133,79 @@ export class BookAppointmentViewComponent {
     );
   }
 
-  sortByDate(){
-          var temp;
-          var listToSort : PatientAppointmentDto[] = [...this.dataSource];
-          for(let i = 0; i< listToSort.length; i++){
-            for(let j = 0; j< listToSort.length; j++){
-              if(listToSort[i].date <= listToSort[j].date){
-                temp = listToSort[i];
-                listToSort[i] = listToSort[j];
-                listToSort[j] = temp;
-               }
-            }
-          }
-          this.dataSource = [...listToSort];
+  sortByDate() {
+  let temp;
+  let listToSort: PatientAppointmentDto[] = [...this.dataSource];
+
+  for (let i = 0; i < listToSort.length; i++) {
+    for (let j = 0; j < listToSort.length; j++) {
+      if (new Date(listToSort[i].date) <= new Date(listToSort[j].date)) {
+        temp = listToSort[i];
+        listToSort[i] = listToSort[j];
+        listToSort[j] = temp;
+      }
+    }
+  }
+
+  this.dataSource = [...listToSort];
+}
+
+
+  filterByDate(result: any){
+    if (result.appointmentDate) {
+      const selectedDate = new Date(result.appointmentDate);
+      selectedDate.setHours(0, 0, 0, 0);
+
+      let newList: PatientAppointmentDto[] = [];
+
+      for (let i of this.allAppointments) {
+        const itemDate = new Date(i.date);
+        itemDate.setHours(0, 0, 0, 0);
+
+        if (itemDate.getTime() === selectedDate.getTime()) {
+          newList.push(i);
         }
+      }
+
+      this.dataSource = newList;
+      this.sortByDate();
+    }
+  }
+
+  filterByName(result : any){
+    if (result.username && result.username.trim() !== ''){
+      let filteredList: PatientAppointmentDto[] = [];
+      for (let i = 0; i < this.allAppointments.length; i++){
+        const fullName = (this.allAppointments[i].nutritionistName + ' ' + this.allAppointments[i].nutritionistLastName).toLowerCase();
+
+        if (fullName.includes(result.username)) {
+        filteredList.push(this.allAppointments[i]);
+        }
+      }
+      this.dataSource = [...filteredList];
+    }
+
+    this.mapData();
+    this.sortByDate();
+  }
+
+  private mapData(): void {
+    this.nutritionistFullName = [];
+    this.appointmentType = [];
+
+    for (let i = 0; i < this.dataSource.length; i++) {
+      this.nutritionistFullName[i] =
+        this.dataSource[i].nutritionistName + " " + this.dataSource[i].nutritionistLastName;
+
+      if (this.dataSource[i].duration == 20) {
+        this.appointmentType[i] = "CONSULTATION";
+      } else if (this.dataSource[i].duration == 30) {
+        this.appointmentType[i] = "CONTROL";
+      } else if (this.dataSource[i].duration == 60) {
+        this.appointmentType[i] = "EXAMINATION";
+      }
+    }
+  }
+
 
 }

@@ -83,6 +83,10 @@ export class LoginService {
     return this.http.get<number>('/api/users/getUsersPenaltyPoints/'+id);
    }
 
+   getIsBlocked(id : number){
+    return this.http.get<boolean>('/api/users/getIsBlocked/'+id);
+   }
+
    getHasLogged(userId : number){
     return this.http.get<Boolean>('api/users/getHasLogged/'+userId);
    }

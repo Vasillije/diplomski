@@ -73,6 +73,8 @@
     flex-wrap: wrap; /* Omogućava prelamanje kartica u novi red */
     gap: 16px; /* Razmak između kartica */
     justify-content: flex-start; /* Poravnanje kartica sa leve strane */
+    margin-left: 20px;
+    padding-bottom: 20px;
 }
 
 .card {

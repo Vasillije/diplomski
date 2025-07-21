@@ -31,7 +31,7 @@ export class LoginComponent {
     (data) => {
       localStorage.setItem('JWT', data.accessToken);
       this.loginService.userLoginTracker();
-      this.penaltyPoints();
+      this.isBlocked();
 
       // Proveravamo rolu pre poziva `hasLogged`
       if (this.loginService.getRole() === 'PATIENT') {
@@ -71,15 +71,30 @@ async hasLogged(userId: number): Promise<boolean> {
 
 
   penaltyPoints(){
-      this.loginService.getUsersPenaltyPoints(this.loginService.getUserId()!).subscribe(
-        (data) =>{
-          if(data >= 5){
-            alert("User is banned");
-            this.loginService.logout();
-          }
-        },
-        (error) =>
-          alert("Could not log in")
-      );
+    this.loginService.getUsersPenaltyPoints(this.loginService.getUserId()!).subscribe(
+      (data) =>{
+        if(data >= 5){
+          alert("User is banned");
+          this.loginService.logout();
+        }
+       },
+      (error) =>
+         alert("Could not log in")
+    );
   }
+
+  isBlocked(){
+    this.loginService.getIsBlocked(this.loginService.getUserId()!).subscribe(
+      (data) =>{
+        if(data == true){
+          alert("User is banned");
+          this.loginService.logout();
+        }
+       },
+      (error) =>
+         alert("Could not log in")
+    );
+  }
+
+
 }
