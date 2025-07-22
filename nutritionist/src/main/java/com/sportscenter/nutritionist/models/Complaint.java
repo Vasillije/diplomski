@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -19,4 +21,6 @@ public class Complaint {
     private String content;
     @Column(nullable = true)
     private int answerId;
+    @Column(nullable = true)
+    private Date dateAndTime;
 }

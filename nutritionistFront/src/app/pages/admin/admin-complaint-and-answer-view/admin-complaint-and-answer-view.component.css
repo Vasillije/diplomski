@@ -13,7 +13,6 @@ table {
   position: absolute; 
   display: flex;
   flex-direction: row;
-  padding: 20px;
   border-radius: 15px;
   align-items: center;
   width: 80%;
@@ -41,3 +40,10 @@ table {
 ::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
   background-color: rgb(211, 211, 211);
 }
+
+.wrap-content {
+  max-width: 200px; /* koliko god želiš */
+  word-wrap: break-word;
+  white-space: normal;
+}
+

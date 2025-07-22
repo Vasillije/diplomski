@@ -15,7 +15,8 @@ export class ComplaintAnswerViewComponent {
 
   constructor(private complaintService : ComplaintService, private route: ActivatedRoute, private router : Router, private loginService : LoginService){}
   
-    id!: number;
+  id!: number;
+  currentDate : Date = new Date();
   
   ngOnInit(): void {
     this.id = +this.route.snapshot.paramMap.get('id')!;
@@ -27,7 +28,8 @@ export class ComplaintAnswerViewComponent {
     const dto :  AnswerComplaintDto ={
       complaintId: this.id,
       nutritionistId: this.loginService.getUserId()!,
-      content: result.answer
+      content: result.answer,
+      date: this.currentDate
     };
 
     if(dto.content.length > 255){

@@ -10,4 +10,5 @@ public class PastBookedAppointmentsByNutritionistIdDto {
     private int patientId;
     private int duration;
     private Date date;
+    private String patientsFullName;
 }

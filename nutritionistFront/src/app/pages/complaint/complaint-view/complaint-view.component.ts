@@ -15,6 +15,8 @@ export class ComplaintViewComponent {
 
   constructor(private complaintService : ComplaintService, private route: ActivatedRoute, private router : Router, private loginService : LoginService){}
 
+  currentDate : Date = new Date();
+
   id!: number;
   
   ngOnInit(): void {
@@ -26,8 +28,12 @@ export class ComplaintViewComponent {
     const dto : CreateComplaintDto = {
       appointmentId: this.id,
       content: result.complaint,
-      patientId: this.loginService.getUserId()!
+      patientId: this.loginService.getUserId()!,
+      date: this.currentDate
     }
+
+    console.log(dto);
+    console.log(typeof(dto.date));
 
     if(dto.content.length > 250){
       alert("Content is too long. Max is 255 characters!");

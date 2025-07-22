@@ -3,10 +3,10 @@ table {
     background-color: rgb(247, 247, 245);
   }
 
-  .background{
-    height: 100vh;
-    width: 100%;
-    background-color: rgb(247, 247, 245);
+.background{
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(247, 247, 245);
 }
 
 .center{
@@ -19,6 +19,12 @@ table {
   width: 80%;
   margin-left: 5%;
   margin-top: 5%;
+}
+
+.table-container {
+  max-height: 600px;
+  overflow-y: auto;
+  width: 100%;
 }
 
 .btn{
@@ -56,4 +62,28 @@ table {
 ::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
   /* background-color: rgb(145, 255, 153); */
   background-color: rgb(211, 211, 211);
+}
+
+.buttons{
+  margin-left: 5%;
+  margin-bottom: 30px;
+}
+
+.picker{
+  margin-left: 20px;
+  width: 145px;
+}
+
+.filter{
+  padding: 20px;
+  border-radius: 15px;
+  align-items: center;
+  width: 80%;
+  margin-left: 5%;
+  padding-top: 5%;
+}
+
+.inputName{
+  width: 240px;
+  margin-left: 20px;
 }

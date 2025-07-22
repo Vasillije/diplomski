@@ -110,7 +110,7 @@ export class BookAppointmentViewComponent {
   getOnlyControls() {
     this.appointmentService.getAvailableAppointments().subscribe(
       (data) => {
-        this.dataSource = data.filter((dto: PatientAppointmentDto) => dto.duration === 30);
+        this.dataSource = data.filter((dto: PatientAppointmentDto) => dto.duration === 40);
         this.mapData();
         this.sortByDate();
       },
@@ -183,10 +183,9 @@ export class BookAppointmentViewComponent {
         }
       }
       this.dataSource = [...filteredList];
+      this.mapData();
+      this.sortByDate();
     }
-
-    this.mapData();
-    this.sortByDate();
   }
 
   private mapData(): void {
@@ -199,7 +198,7 @@ export class BookAppointmentViewComponent {
 
       if (this.dataSource[i].duration == 20) {
         this.appointmentType[i] = "CONSULTATION";
-      } else if (this.dataSource[i].duration == 30) {
+      } else if (this.dataSource[i].duration == 40) {
         this.appointmentType[i] = "CONTROL";
       } else if (this.dataSource[i].duration == 60) {
         this.appointmentType[i] = "EXAMINATION";
@@ -207,5 +206,9 @@ export class BookAppointmentViewComponent {
     }
   }
 
-
+  reset(){
+    this.dataSource = [...this.allAppointments];
+    this.mapData();
+    this.sortByDate();
+  }
 }

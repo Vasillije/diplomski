@@ -10,11 +10,11 @@
 
             <ng-container matColumnDef="complaintContent">
                 <th mat-header-cell *matHeaderCellDef> COMPLAINT CONTENT </th>
-                <td mat-cell *matCellDef="let element"> {{element.complaintContent}} </td>
+                <td mat-cell *matCellDef="let element" class="wrap-content"> {{element.complaintContent}} </td>
             </ng-container>
 
             <ng-container matColumnDef="answerId">
-                <th mat-header-cell *matHeaderCellDef> ABSWER ID </th>
+                <th mat-header-cell *matHeaderCellDef> ANSWER ID </th>
                 <td mat-cell *matCellDef="let element"> {{element.answerId}} </td>
             </ng-container>
 

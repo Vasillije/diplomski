@@ -10,4 +10,6 @@ public class NutritionistComplaintsDto {
     private int appointmentId;
     private int nutritionistId;
     private String content;
+    private String patientsFullName;
+    private Date appointmentDate;
 }

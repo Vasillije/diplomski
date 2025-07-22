@@ -15,7 +15,7 @@ import { AppointmentsByDateDto } from '../interfaces/AppointmentsByDateDto';
 export class CreateAppointmentComponent {
   types = [
     {value: 20, viewValue: 'Consultation'},
-    {value: 30, viewValue: 'Control'},
+    {value: 40, viewValue: 'Control'},
     {value: 60, viewValue: 'Examination'},
   ];
   minDate: Date = new Date();

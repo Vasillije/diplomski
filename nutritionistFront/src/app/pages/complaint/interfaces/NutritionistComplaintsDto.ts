@@ -3,4 +3,6 @@ export interface NutritionistComplaintsDto{
     appointmentId : number,
     nutritionistId : number,
     content : string
+    patientsFullName : string,
+    appointmentDate : Date,
 }

@@ -263,12 +263,13 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
 
         for(Appointment a : validAppointments){
+            UserEntity patient = userRepository.findById(a.getPatientId()).orElse(null);
             PastBookedAppointmentsByNutritionistIdDto dto = new PastBookedAppointmentsByNutritionistIdDto();
             dto.setAppointmentId(a.getId());
             dto.setDate(a.getDateAndTime());
             dto.setDuration(a.getDuration());
             dto.setPatientId(a.getPatientId());
-
+            dto.setPatientsFullName(patient.getName() + ' ' + patient.getLastname());
             dtos.add(dto);
         }
         return dtos;

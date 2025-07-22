@@ -1,4 +1,35 @@
 <div class="background">
+    <div class="filter">
+        <form #filterForm="ngForm" (ngSubmit)="filterDate(filterForm.value)">
+            <mat-form-field class="picker">
+                <mat-label>Date from</mat-label>
+                <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="picker">
+                <mat-label>Date to</mat-label>
+                <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
+                <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                <mat-datepicker #pickerTo></mat-datepicker>
+            </mat-form-field>
+            <button mat-button class="btn" id="filterBtn">FILTER</button>
+        </form>
+        <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)">
+        <mat-form-field class="inputName">
+            <mat-label>Patients's name</mat-label>
+            <input matInput type="text" name="username" ngModel>
+        </mat-form-field>
+                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+        </form>
+        <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
+        <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
+        <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
+        <button mat-button class="btn" (click)="getPastAppointments()" >PAST APPOINTMENTS</button>
+        <button mat-button class="btn" (click)="getFutureAppointments()" >FUTURE APPOINTMENTS</button>
+        <button mat-button class="btn" (click)="reset()" >RESET FILTERS</button>
+    </div>
     <div class="center">
         <table mat-table [dataSource]="dataSource">
             <ng-container matColumnDef="date">
@@ -44,10 +75,6 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <div class="buttons">
-            <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
-            <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
-            <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
-        </div>
+    
     </div>
 </div>

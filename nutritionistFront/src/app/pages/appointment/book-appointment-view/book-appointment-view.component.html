@@ -10,18 +10,18 @@
         <button mat-button class="btn" id="dateBtn">FILTER</button>
         </form>
         <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)">
-        <mat-form-field class="inputName">
-            <mat-label>Nutritionist's name</mat-label>
-            <input matInput type="text" name="username" ngModel>
-        </mat-form-field>
-        <button mat-button class="btn" id="dateBtn">FILTER</button>
+            <mat-form-field class="inputName">
+                <mat-label>Nutritionist's name</mat-label>
+                <input matInput type="text" name="username" ngModel>
+            </mat-form-field>
+            <button mat-button class="btn" id="dateBtn">FILTER</button>
         </form>
     </div>
     <div class="buttons">
         <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
         <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
         <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
-        <button mat-button class="btn" (click)="getAvailableAppointments()" >RESET</button>
+        <button mat-button class="btn" (click)="reset()" >RESET</button>
     </div>
     <div class="center">
         <div class="table-container">

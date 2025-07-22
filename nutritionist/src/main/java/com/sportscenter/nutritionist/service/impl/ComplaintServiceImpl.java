@@ -44,6 +44,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         complaint.setAppointmentId(dto.getAppointmentId());
         complaint.setContent(dto.getContent());
         complaint.setAnswerId(0);
+        complaint.setDateAndTime(dto.getDate());
 
         Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment not found"));
         appointment.setHasComplaint(true);
@@ -65,6 +66,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         List<Complaint> complaints = complaintRepository.findAll();
         List<Complaint> nutritionistComplaints = new ArrayList<>();
         List<NutritionistComplaintsDto> complaintDtos = new ArrayList<>();
+        List<UserEntity> patients = userRepository.findAllPatients();
 
         for(Appointment a : appointments){
             if(a.isHasComplaint() && !a.isHasComplaintAnswer() && a.getNutritionistId()==nutritionistId){
@@ -83,6 +85,16 @@ public class ComplaintServiceImpl implements ComplaintService {
             dto.setNutritionistId(c.getNutritionistId());
             dto.setId(c.getId());
             dto.setAppointmentId(c.getAppointmentId());
+            if(c.getPatientId() != 0){
+                for(UserEntity patient : patients){
+                    if(patient.getId() == c.getPatientId()){
+                        dto.setPatientsFullName(patient.getName() + ' ' + patient.getLastname());
+                    }
+                }
+            }
+            if(c.getDateAndTime() != null){
+                dto.setAppointmentDate(c.getDateAndTime());
+            }
             complaintDtos.add(dto);
         }
         return complaintDtos;
@@ -99,6 +111,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         answer.setAppointmentId(appointment.getId());
         answer.setNutritionistId(appointment.getNutritionistId());
         answer.setPatientId(appointment.getPatientId());
+        answer.setDateAndTime(dto.getDate());
 
         answerRepository.save(answer);
 
