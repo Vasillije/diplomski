@@ -3,7 +3,7 @@ package com.sportscenter.nutritionist.dto.users;
 import lombok.Data;
 
 @Data
-public class UserHealthInfoDto {
+public class UserInfoDto {
     private int patientId;
     private String username;
     private int gender;

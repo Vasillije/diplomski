@@ -13,6 +13,7 @@ import { AppointmentModule } from './pages/appointment/appointment.module';
 import { ComplaintModule } from './pages/complaint/complaint.module';
 import { AdminModule } from './pages/admin/admin.module';
 import { MealPlanModule } from './pages/meal-plan/meal-plan.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { MealPlanModule } from './pages/meal-plan/meal-plan.module';
     AppointmentModule,
     ComplaintModule,
     AdminModule,
-    MealPlanModule
+    MealPlanModule,
+    SharedModule
   ],
   providers: [
     provideAnimationsAsync(),

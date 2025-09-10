@@ -47,7 +47,7 @@ export class LoginComponent {
       }
     },
     (error) => {
-      alert(error);
+      alert("Wrong credentials");
     }
   );
 }
@@ -72,14 +72,14 @@ async hasLogged(userId: number): Promise<boolean> {
 
   penaltyPoints(){
     this.loginService.getUsersPenaltyPoints(this.loginService.getUserId()!).subscribe(
-      (data) =>{
-        if(data >= 5){
-          alert("User is banned");
-          this.loginService.logout();
-        }
-       },
-      (error) =>
-         alert("Could not log in")
+    (data) =>{
+      if(data >= 5){
+        alert("User is banned");
+        this.loginService.logout();
+      }
+    },
+    (error) =>
+      alert("Could not log in")
     );
   }
 

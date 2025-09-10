@@ -3,5 +3,6 @@ export interface PastBookedAppointmentsByNutritionistIdDto{
     patientId : number,
     duration : number,
     date : Date,
-    patientsFullName : string
+    patientsFullName : string,
+    dateBooked : Date
 }

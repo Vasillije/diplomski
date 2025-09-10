@@ -209,11 +209,11 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    public UserHealthInfoDto getUserHealthInfoByAppointmentId(int id){
+    public UserInfoDto getUserInfoByAppointmentId(int id){
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Appointment not found"));
         UserEntity patient = userRepository.findById(appointment.getPatientId()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserHealthInfoDto dto = new UserHealthInfoDto();
+        UserInfoDto dto = new UserInfoDto();
         dto.setPatientId(patient.getId());
         dto.setGender(patient.getGender().ordinal());
         dto.setPhysicalActivity(patient.getPhysicalActivity().ordinal());

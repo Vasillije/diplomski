@@ -16,10 +16,25 @@
     width: 1000px;
 }
 
-.btn{
-    align-self:flex-end;
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
+h1 {
+    font-family: Georgia, serif !important;
+    color: #012a5b;
+    text-align: center;
+    font-size: 30px;
+    margin: 30px 0;
+    width: 100%;
+}
+
+.btn {
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+#submitBtn{
+    margin-left: 800px;
 }
 
 .inp {

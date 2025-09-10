@@ -5,6 +5,8 @@ import { PatientAppointmentDto } from '../interfaces/PatientAppointmentDto';
 import { BookAppointmentDto } from '../interfaces/BookAppointmentDto';
 import { NutritionistAppointmentDto } from '../interfaces/NutritionistAppointmentDto';
 import { AppointmentsByDateDto } from '../interfaces/AppointmentsByDateDto';
+import { BookDto } from '../interfaces/BookDto';
+import { CancelAppointmentDto } from '../interfaces/CancelAppointmentDto';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,10 @@ export class AppointmentService {
     return this.http.post<void>("/api/appointment/bookAppointment", dto);
   }
 
+  book(dto : BookDto){
+    return this.http.post<void>("/api/appointment/book", dto);
+  }
+
   getNutritionistAppointments(id : number){
     return this.http.get<NutritionistAppointmentDto[]>("/api/appointment/getAppointmentsByNutritionistId/"+id);
   }
@@ -33,8 +39,8 @@ export class AppointmentService {
     return this.http.get<PatientAppointmentDto[]>("/api/appointment/getAppointmentsByPatientId/"+id);
   }
 
-  cancelAppointmentPatient(id : number){
-    return this.http.post<void>("api/appointment/cancelAppointmentPatient", id);
+  cancelAppointmentPatient(dto : CancelAppointmentDto){
+    return this.http.post<void>("api/appointment/cancelAppointmentPatient", dto);
   }
 
   isAppointmentOverlapping(dto : CreateAppointmentDto){

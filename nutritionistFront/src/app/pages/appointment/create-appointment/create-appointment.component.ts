@@ -103,7 +103,7 @@ export class CreateAppointmentComponent {
          if(this.dataSource[i].duration == 20){
           this.appointmentType[i] = 'CONSULTATION';
         }
-        else if(this.dataSource[i].duration == 30){
+        else if(this.dataSource[i].duration == 40){
           this.appointmentType[i] = 'CONTROL';
         }
         else if(this.dataSource[i].duration == 60){

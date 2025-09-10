@@ -1,7 +1,6 @@
 package com.sportscenter.nutritionist.controllers;
 
 import com.sportscenter.nutritionist.dto.users.*;
-import com.sportscenter.nutritionist.enums.Disease;
 import com.sportscenter.nutritionist.enums.Gender;
 import com.sportscenter.nutritionist.enums.Goal;
 import com.sportscenter.nutritionist.enums.PhysicalActivity;
@@ -21,8 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -156,8 +153,8 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserInfo(id), HttpStatus.OK);
     }
 
-    @GetMapping("getUserHealthInfoByAppointmentId/{id}")
-    public ResponseEntity<UserHealthInfoDto> getUserHealthInfoByAppointmentId(@PathVariable int id){
-        return new ResponseEntity<>(userService.getUserHealthInfoByAppointmentId(id), HttpStatus.OK);
+    @GetMapping("getUserInfoByAppointmentId/{id}")
+    public ResponseEntity<UserInfoDto> getUserHealthInfoByAppointmentId(@PathVariable int id){
+        return new ResponseEntity<>(userService.getUserInfoByAppointmentId(id), HttpStatus.OK);
     }
 }

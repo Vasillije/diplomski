@@ -17,12 +17,15 @@ import { UnblockUserViewComponent } from './pages/admin/unblock-user-view/unbloc
 import { NutritionistMealPlanViewComponent } from './pages/meal-plan/nutritionist-meal-plan-view/nutritionist-meal-plan-view.component';
 import { CreateMealPlanViewComponent } from './pages/meal-plan/create-meal-plan-view/create-meal-plan-view.component';
 import { CreateMealPlanPatientViewComponent } from './pages/meal-plan/create-meal-plan-patient-view/create-meal-plan-patient-view.component';
+import { CreateAppointmentViewComponent } from './pages/appointment/create-appointment-view/create-appointment-view.component';
+import { AnsweredNutritionistComplaintsViewComponent } from './pages/complaint/answered-nutritionist-complaints-view/answered-nutritionist-complaints-view.component';
+import { UserHealthInfoComponent } from './pages/user-profile/user-health-info/user-health-info.component';
+
 const routes: Routes = [
   { path : 'login', component : LoginComponent },
   { path : 'register', component : RegisterComponent },
   { path : '', component : HomepageComponent },
   { path : 'user-profile', component : UserProfileComponent},
-  { path : 'create-appointment', component : CreateAppointmentComponent },
   { path : 'nutritionist-appointment-view', component : NutritionistAppointmentViewComponent },
   { path : 'patient-appointment-view', component : PatientAppointmentViewComponent },
   { path : 'book-appointment-view', component : BookAppointmentViewComponent },
@@ -34,6 +37,9 @@ const routes: Routes = [
   { path : 'unblock-user-view', component : UnblockUserViewComponent },
   { path : 'create-meal-plan-view', component : CreateMealPlanViewComponent },
   { path : 'create-meal-plan-patient-view/:id', component : CreateMealPlanPatientViewComponent },
+  { path : 'create-appointment-view', component : CreateAppointmentViewComponent },
+  { path : 'answered-nutritionist-complaints-view', component : AnsweredNutritionistComplaintsViewComponent },
+  { path : 'user-health-info/:id', component : UserHealthInfoComponent }
 ];
 
 @NgModule({

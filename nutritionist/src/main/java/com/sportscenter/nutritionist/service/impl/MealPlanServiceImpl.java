@@ -1219,6 +1219,15 @@ public class MealPlanServiceImpl implements MealPlanService {
         a.setHasMealPlan(true);
         appointmentRepository.save(a);
 
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByDateBooked(a.getDateBooked());
+
+        for(Appointment appointment : appointments){
+            if(a.getNutritionistId() == appointment.getNutritionistId()){
+                appointment.setHasMealPlan(true);
+                appointmentRepository.save(appointment);
+            }
+        }
+
         String text = dto.getContent();
 
         ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();

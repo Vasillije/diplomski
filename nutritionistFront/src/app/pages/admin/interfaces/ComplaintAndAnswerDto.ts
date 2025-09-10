@@ -5,5 +5,10 @@ export interface ComplaintAndAnswerDto{
     answerContent : string,
     nutritionistId : number,
     patientId : number,
-    appointmentId : number
+    appointmentId : number,
+    nutritionistFullName : string,
+    patientFullName : string,
+    complaintDate : Date,
+    answerDate : Date,
+    appointmentDate : string
 }

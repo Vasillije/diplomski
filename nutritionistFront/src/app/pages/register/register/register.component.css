@@ -1,51 +1,152 @@
-.background{
-    height: auto;
-    width: 100%;
-    background-color: rgb(247, 247, 245);
+/* Reset za host element */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh; /* Promenjeno iz height u min-height */
 }
 
-h1{
-    font-family: Georgia, serif;
-    font-size: 36px;
-    text-align: center;
-    margin-right: 100px;
-    color: rgb(243, 243, 243);
+.register-container {
+  width: 100%;
+  min-height: 100vh; /* Promenjeno iz height u min-height */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  padding-top: 80px; /* Povećan padding */
 }
 
-.center{
-    position: absolute; 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    border-radius: 25px;
+h1 {
+  font-family: Georgia, serif;
+  font-size: 36px;
+  text-align: center;
+  color: rgb(243, 243, 243);
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+.center {
+  position: relative;
+  display: flex;
+  border-radius: 25px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  max-width: 900px;
+  width: 100%;
+  height: 550px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  margin: 0;
+}
+
+.frm {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 400px;
+  padding: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.register-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+  filter: brightness(0.4);
+  z-index: 1;
+}
+
+.field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.btn {
+  background-color: #012a5b !important;
+  color: rgb(247, 247, 245) !important;
+  width: 100%;
+  padding: 8px 0;
+  margin-top: 10px;
+  border-radius: 0%;
+}
+
+/* Stil za input polja */
+::ng-deep .mat-mdc-text-field-wrapper {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Stil za labelu kada je fokusirano */
+::ng-deep .mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+/* Responsive dizajn za manje ekrane */
+@media (max-width: 900px) {
+  .register-container {
+    padding-top: 60px; /* Smanjen padding za tablete */
+  }
+  
+  .center {
+    height: 500px;
+    max-width: 95%;
+  }
+  
+  .frm {
+    width: 85%;
+    padding: 25px;
+  }
+  
+  h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-container {
+    padding-top: 40px; /* Još manji padding za mobilne */
+  }
+  
+  .center {
     flex-direction: column;
-    align-items: center;
-    width: 600px;
-    padding-left: 100px;
+    height: auto;
+    min-height: 500px;
+  }
+  
+  .frm {
+    width: 90%;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 28px;
+  }
 }
 
-.frm{
-    padding-top: 50px;
-    position: absolute;
-    padding-left: 50px;
-}
-
-.register-img{
-    width: 700px;
-    margin-right: 100px;
-    height: 550px;
-    border-radius: 15px;
-    filter: brightness(0.4);
-}
-
-.field{
-    width : 400px
-}
-
-.btn{
-    background-color: rgba(208, 197, 238, 0.637);
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
-    width: 73%;
+@media (max-width: 480px) {
+  .register-container {
+    padding-top: 30px; /* Minimalni padding za male ekrane */
+  }
+  
+  .frm {
+    width: 95%;
+    padding: 15px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .field {
+    margin-bottom: 10px;
+  }
 }

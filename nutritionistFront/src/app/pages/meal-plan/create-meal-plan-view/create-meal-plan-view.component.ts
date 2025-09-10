@@ -14,24 +14,55 @@ import { PastBookedAppointmentsByNutritionistIdDto } from '../interfaces/PastBoo
 export class CreateMealPlanViewComponent {
   dataSource : any;
   allAppointments : PastBookedAppointmentsByNutritionistIdDto[] = [];
-  displayedColumns = ["patientsFullName", "duration", "date", "mealPlan"];
+  displayedColumns = ["patientsFullName", "date", "mealPlan", "healthInfo"];
 
   constructor(private mealPlanService : MealPlanService, private loginService : LoginService, private router : Router){}
 
   ngOnInit(){
-    this.getPastBookedAppointmentsByNutritionistId();
+    this.getPastBookedExaminationsByNutritionistId();
   }
 
-  getPastBookedAppointmentsByNutritionistId(){
-    this.mealPlanService.getPastBookedAppointmentsByNutritionistId(this.loginService.getUserId()!).subscribe(
+  getPastBookedExaminationsByNutritionistId(){
+    this.mealPlanService.getPastBookedExaminationsByNutritionistId(this.loginService.getUserId()!).subscribe(
       (data) => {
-        this.dataSource = [...data];
-        this.allAppointments = data;
-        console.log("data source : ",this.dataSource);
+        const filteredData = this.filterFirstAppointmentsOnly(data);
+        this.dataSource = [...filteredData];
+        this.allAppointments = filteredData;
+        console.log("data source : ", this.dataSource);
       },
     (error) =>
       alert("There was an error")
     );
+  }
+
+  filterFirstAppointmentsOnly(appointments: PastBookedAppointmentsByNutritionistIdDto[]): PastBookedAppointmentsByNutritionistIdDto[] {
+    // Grupiši appointmente po dateBooked vremenu
+    const appointmentsByDateBooked = new Map<string, PastBookedAppointmentsByNutritionistIdDto[]>();
+    
+    for (const appointment of appointments) {
+      // Koristimo timestamp za tačno poređenje
+      const dateBookedKey = new Date(appointment.dateBooked).getTime().toString();
+      
+      if (!appointmentsByDateBooked.has(dateBookedKey)) {
+        appointmentsByDateBooked.set(dateBookedKey, []);
+      }
+      appointmentsByDateBooked.get(dateBookedKey)!.push(appointment);
+    }
+    
+    // Iz svake grupe uzmi samo prvi appointment (najraniji po datumu)
+    const result: PastBookedAppointmentsByNutritionistIdDto[] = [];
+    
+    for (const [dateBookedKey, appointmentGroup] of appointmentsByDateBooked) {
+      if (appointmentGroup.length > 0) {
+        // Sortiraj grupu po datumu appointmenta i uzmi prvi
+        const sortedGroup = appointmentGroup.sort((a, b) => 
+          new Date(a.date).getTime() - new Date(b.date).getTime()
+        );
+        result.push(sortedGroup[0]);
+      }
+    }
+    
+    return result;
   }
 
   createMealPlan(element: any) {
@@ -108,6 +139,11 @@ export class CreateMealPlanViewComponent {
   reset(){
     this.dataSource = [...this.allAppointments];
     this.sortByDate();
+  }
+
+  usersHealthInfo(id : number){
+    console.log(id);
+    this.router.navigate(["user-health-info", id]);
   }
 
 }

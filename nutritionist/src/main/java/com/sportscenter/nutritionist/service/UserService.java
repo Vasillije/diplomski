@@ -20,5 +20,5 @@ public interface UserService {
     public List<UnblockUserDto> getBlockedUsers();
     public void unblockUser(int id);
     public UserDto getUserInfo(int id);
-    public UserHealthInfoDto getUserHealthInfoByAppointmentId(int id);
+    public UserInfoDto getUserInfoByAppointmentId(int id);
 }

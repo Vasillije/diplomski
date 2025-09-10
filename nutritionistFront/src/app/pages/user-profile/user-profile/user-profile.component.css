@@ -1,12 +1,11 @@
 .background {
-    height: 110vh;
+    height: 100vh;
     width: 100%;
     background-color: rgb(247, 247, 245);
     position: relative;
 }
 
 .background1 {
-    margin-top: 60px;
     display: flex;
     justify-content: space-between;
     align-items: stretch;
@@ -17,7 +16,7 @@
 h2{
     margin: 10px 0;
     text-align: center;
-    font-family: Verdana, Tahoma, sans-serif;
+    font-family: Georgia, serif;
     font-size: 30px;
     color: white;
 }
@@ -40,8 +39,9 @@ button.btn {
     margin-top: 10px; /* Prostor iznad dugmeta */
     width: 90%;      /* Dugme zauzima celu širinu */
     margin-left: 4%;
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
 }
 
 .finish{

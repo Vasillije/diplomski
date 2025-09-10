@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import {AfterViewInit, ViewChild} from '@angular/core';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import { LoginService } from '../../login/service/login.service';
 import { AppointmentService } from '../services/appointment.service';
 import { NutritionistAppointmentDto } from '../interfaces/NutritionistAppointmentDto';
@@ -15,7 +12,7 @@ import { NutritionistAppointmentDto } from '../interfaces/NutritionistAppointmen
 })
 export class NutritionistAppointmentViewComponent {
   dataSource : any;
-  displayedColumns: string[] = ['date', 'type', 'duration', 'patient', 'cancel'];
+  displayedColumns: string[] = ['date', 'duration', 'patient', 'cancel'];
   appointmentType : string[] = [];
   patientFullName : string[] = [];
   currentDate : Date = new Date();
@@ -33,8 +30,21 @@ export class NutritionistAppointmentViewComponent {
     this.appointmentService.getNutritionistAppointments(this.loginService.getUserId()!).subscribe(
       (data) => {
         this.allAppointments = data;
-        this.dataSource = [...data];
-        this.mapData();
+        
+        this.allAppointments = this.allAppointments.map(appointment => {
+        if (appointment.date) {
+          const originalDate = new Date(appointment.date);
+          originalDate.setHours(originalDate.getHours()); // Ovo će korigovati vreme
+          return {
+            ...appointment,
+            formattedDate: this.formatDate(originalDate),
+            formattedDuration: this.formatDuration(appointment.duration)
+          };
+        }
+        return appointment;
+        });
+
+        this.dataSource = this.getFutureAppointments();
         this.sortByDate();
       },
       (error) =>
@@ -42,61 +52,19 @@ export class NutritionistAppointmentViewComponent {
     );
   }
 
-  getOnlyExaminations() {
-    this.appointmentService.getNutritionistAppointments(this.loginService.getUserId()!).subscribe(
-      (data) => {
-        this.dataSource = data.filter((dto: NutritionistAppointmentDto) => dto.duration === 60);
-        this.mapData();
-        this.sortByDate();
-      },
-      (error) => {
-        alert(error.message);
-      }
-    );
+  formatDate(date: Date): string {
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    
+    return `${day}.${month}.${year} - ${hours}:${minutes}`;
   }
-    
-  getOnlyControls() {
-    this.appointmentService.getNutritionistAppointments(this.loginService.getUserId()!).subscribe(
-       (data) => {
-        this.dataSource = data.filter((dto: NutritionistAppointmentDto) => dto.duration === 40);
-        this.mapData();
-        this.sortByDate();
-       },
-       (error) => {
-        alert(error.message);
-      }
-    );
-   }
-    
-    getOnlyConsultation() {
-      this.appointmentService.getNutritionistAppointments(this.loginService.getUserId()!).subscribe(
-        (data) => {
-          this.dataSource = data.filter((dto: NutritionistAppointmentDto) => dto.duration === 20);
-          this.mapData();
-          this.sortByDate();
-        },
-        (error) => {
-          alert(error.message);
-        }
-      );
-    }
 
-    private mapData(): void {
-    this.patientFullName = [];
-    this.appointmentType = [];
-
-    for (let i = 0; i < this.dataSource.length; i++) {
-      this.patientFullName[i] =
-        this.dataSource[i].patientName + " " + this.dataSource[i].patientLastName;
-
-      if (this.dataSource[i].duration == 20) {
-        this.appointmentType[i] = "CONSULTATION";
-      } else if (this.dataSource[i].duration == 40) {
-        this.appointmentType[i] = "CONTROL";
-      } else if (this.dataSource[i].duration == 60) {
-        this.appointmentType[i] = "EXAMINATION";
-      }
-    }
+  // DODAJ: Metoda za formatiranje trajanja
+  formatDuration(duration: number): string {
+    return duration + " min";
   }
 
   canCancelAppointment(element : any){
@@ -186,41 +154,39 @@ export class NutritionistAppointmentViewComponent {
     }
     this.dataSource = newList;
     this.sortByDate();
+    return newList;
   }
 
 
-  getPastAppointments(){
-    let listToFilter: NutritionistAppointmentDto[] = [...this.allAppointments];
-    let newList :  NutritionistAppointmentDto[] =[];
-    for(let i of listToFilter){
-      const date = new Date(i.date);
-      if(date <= this.currentDate){
-        newList.push(i);
-      }
-    }
-    this.dataSource = newList;
-    this.sortByDate();
-  }
+getPastAppointments() {
+  const newList = this.allAppointments
+    .filter(a => new Date(a.date) <= this.currentDate)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // opadajuće
+
+  this.dataSource = newList;
+}
 
   filterByName(result : any){
     if (result.username && result.username.trim() !== ''){
       let filteredList: NutritionistAppointmentDto[] = [];
       for (let i = 0; i < this.allAppointments.length; i++){
-        const fullName = (this.allAppointments[i].patientName + ' ' + this.allAppointments[i].patientLastName).toLowerCase();
+        const fullName = (this.allAppointments[i].patientFullName.toLowerCase());
     
         if (fullName.includes(result.username)) {
           filteredList.push(this.allAppointments[i]);
         }
       }
-      this.dataSource = [...filteredList];
-      this.mapData();
-      this.sortByDate();
+
+      const futureAppointments = filteredList
+        .filter(a => new Date(a.date) > this.currentDate)
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // rastuće
+
+      const pastAppointments = filteredList
+        .filter(a => new Date(a.date) <= this.currentDate)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // opadajuće
+        
+      this.dataSource = [...futureAppointments, ...pastAppointments];
     }
   }
 
-  reset(){
-    this.dataSource = [...this.allAppointments];
-    this.mapData();
-    this.sortByDate();
-  }
 }

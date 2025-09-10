@@ -3,5 +3,7 @@ export interface AppointmentsByDateDto{
     date : Date,
     duration : number,
     patientName : string,
-    patientLastName : string
+    patientLastName : string,
+    formattedDate?: string,
+    formattedDuration? : string
 }

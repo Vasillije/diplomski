@@ -1,9 +1,6 @@
 package com.sportscenter.nutritionist.service.impl;
 
-import com.sportscenter.nutritionist.dto.complaint.AnswerComplaintDto;
-import com.sportscenter.nutritionist.dto.complaint.ComplaintAndAnswerDto;
-import com.sportscenter.nutritionist.dto.complaint.CreateComplaintDto;
-import com.sportscenter.nutritionist.dto.complaint.NutritionistComplaintsDto;
+import com.sportscenter.nutritionist.dto.complaint.*;
 import com.sportscenter.nutritionist.email.EmailSenderService;
 import com.sportscenter.nutritionist.models.Appointment;
 import com.sportscenter.nutritionist.models.Complaint;
@@ -18,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ComplaintServiceImpl implements ComplaintService {
@@ -57,6 +56,17 @@ public class ComplaintServiceImpl implements ComplaintService {
         complaint.setPatientId(dto.getPatientId());
         complaintRepository.save(complaint);
 
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByDateBooked(appointment.getDateBooked());
+
+        if(!appointments.isEmpty()){
+            for(Appointment a : appointments){
+                if(a.getNutritionistId() == appointment.getNutritionistId()){
+                    a.setHasComplaint(true);
+                    appointmentRepository.save(a);
+                }
+            }
+        }
+
     }
 
     @Override
@@ -75,12 +85,13 @@ public class ComplaintServiceImpl implements ComplaintService {
         }
 
         for(Appointment a : validAppointments){
-            Complaint complaint = complaintRepository.findComplaintByAppointmentId(a.getId());
-            nutritionistComplaints.add(complaint);
-        }
-
-        for(Complaint c : nutritionistComplaints){
             NutritionistComplaintsDto dto = new NutritionistComplaintsDto();
+            Complaint c = complaintRepository.findComplaintByAppointmentId(a.getId());
+
+            if(c == null){
+                continue;
+            }
+
             dto.setContent(c.getContent());
             dto.setNutritionistId(c.getNutritionistId());
             dto.setId(c.getId());
@@ -92,11 +103,16 @@ public class ComplaintServiceImpl implements ComplaintService {
                     }
                 }
             }
+
             if(c.getDateAndTime() != null){
-                dto.setAppointmentDate(c.getDateAndTime());
+                dto.setComplaintDate(c.getDateAndTime());
             }
+
+            dto.setAppointmentDate(a.getDateAndTime());
+
             complaintDtos.add(dto);
         }
+
         return complaintDtos;
     }
 
@@ -105,6 +121,7 @@ public class ComplaintServiceImpl implements ComplaintService {
         ComplaintAnswer answer = new ComplaintAnswer();
         Complaint complaint = complaintRepository.findById(dto.getComplaintId()).orElseThrow(() -> new RuntimeException("Complaint not found"));
         Appointment appointment = appointmentRepository.findById(complaint.getAppointmentId()).orElseThrow(() -> new RuntimeException("Complaint not found"));
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByDateBooked(appointment.getDateBooked());
 
         answer.setComplaintId(dto.getComplaintId());
         answer.setContent(dto.getContent());
@@ -115,6 +132,13 @@ public class ComplaintServiceImpl implements ComplaintService {
 
         answerRepository.save(answer);
 
+        if(!appointments.isEmpty()){
+            for(Appointment a : appointments){
+                a.setHasComplaintAnswer(true);
+                appointmentRepository.save(a);
+            }
+        }
+
         appointment.setHasComplaintAnswer(true);
         appointmentRepository.save(appointment);
         complaint.setNutritionistId(dto.getNutritionistId());
@@ -124,30 +148,118 @@ public class ComplaintServiceImpl implements ComplaintService {
         emailSender.sendEmail("", "answer on complaint","Your complaint: "+ complaint.getContent() + " Answer: "+ dto.getContent());
     }
 
-    @Override
-    public List<ComplaintAndAnswerDto> getComplaintsAndAnswers(){
-        List<Complaint> complaints = complaintRepository.findAll();
-        List<ComplaintAndAnswerDto> dtos = new ArrayList<>();
-        for(Complaint c : complaints){
-            ComplaintAndAnswerDto dto = new ComplaintAndAnswerDto();
 
+    @Override
+    public List<ComplaintAndAnswerDto> getComplaintsAndAnswers() {
+        List<Complaint> complaints = complaintRepository.findAll();
+        List<ComplaintAnswer> answers = answerRepository.findAll();
+        List<ComplaintAndAnswerDto> dtos = new ArrayList<>();
+        List<UserEntity> users = userRepository.findAll();
+        List<Appointment> appointments = appointmentRepository.findAll();
+
+        Map<Integer, ComplaintAnswer> answerMap = new HashMap<>();
+
+        for (ComplaintAnswer a : answers) {
+            answerMap.put(a.getId(), a);
+        }
+
+        Map<Integer, UserEntity> userMap = new HashMap<>();
+
+        for (UserEntity user : users) {
+            userMap.put(user.getId(), user);
+        }
+
+        Map<Integer, Appointment> appointmentMap = new HashMap<>();
+
+        for (Appointment appointment : appointments) {
+            appointmentMap.put(appointment.getId(), appointment);
+        }
+
+        for (Complaint c : complaints) {
+            ComplaintAndAnswerDto dto = new ComplaintAndAnswerDto();
             dto.setComplaintId(c.getId());
             dto.setComplaintContent(c.getContent());
             dto.setAnswerId(c.getAnswerId());
             dto.setPatientId(c.getPatientId());
             dto.setAppointmentId(c.getAppointmentId());
+            dto.setComplaintDate(c.getDateAndTime());
 
             if(c.getAnswerId() != 0) {
-                ComplaintAnswer answer = answerRepository.findById(c.getAnswerId()).orElseThrow(() -> new RuntimeException("Answer not found"));
-                dto.setNutritionistId(answer.getNutritionistId());
-                dto.setAnswerContent(answer.getContent());
+                ComplaintAnswer a = answerMap.get(c.getAnswerId());
+                dto.setNutritionistId(a.getNutritionistId());
+                dto.setAnswerContent(a.getContent());
+                dto.setAnswerDate(a.getDateAndTime());
             }
-            else{
+            else {
                 dto.setNutritionistId(0);
                 dto.setAnswerContent("NO ANSWER");
             }
+
+            UserEntity patient = userMap.get(c.getPatientId());
+            dto.setPatientFullName(patient.getName() + " " + patient.getLastname());
+            UserEntity nutritionist = userMap.get(c.getNutritionistId());
+            dto.setNutritionistFullName(nutritionist.getName() + " " + nutritionist.getLastname());
+            Appointment appointment = appointmentMap.get(c.getAppointmentId());
+            dto.setAppointmentDate(appointment.getDateAndTime());
+
             dtos.add(dto);
         }
         return dtos;
     }
+
+    public List<AnsweredNutritionistComplaintsDto> getAnsweredComplaintsByNutritionistId(int nutritionistId){
+        List<Appointment> allAppointments = appointmentRepository.findAppointmentsByNutritionistId(nutritionistId);
+        List<Appointment> validAppointments = new ArrayList<>();
+        List<UserEntity> patients = userRepository.findAllPatients();
+        List<AnsweredNutritionistComplaintsDto> dtos = new ArrayList<>();
+
+        for(Appointment a : allAppointments){
+            if(a.isHasComplaintAnswer()){
+                validAppointments.add(a);
+            }
+        }
+
+        for(Appointment a : validAppointments){
+            AnsweredNutritionistComplaintsDto dto = new AnsweredNutritionistComplaintsDto();
+            Complaint c = complaintRepository.findComplaintByAppointmentId(a.getId());
+            ComplaintAnswer ca = answerRepository.findComplaintAnswerByAppointmentId(a.getId());
+
+            if(ca == null){
+                continue;
+            }
+
+            dto.setAnswerContent(ca.getContent());
+            dto.setNutritionistId(c.getNutritionistId());
+            dto.setContent(c.getContent());
+            dto.setComplaintDate(c.getDateAndTime());
+            for(UserEntity patient : patients){
+                if(c.getPatientId() == patient.getId()){
+                    dto.setPatientsFullName(patient.getName() + ' ' + patient.getLastname());
+                }
+            }
+            dto.setAppointmentId(a.getId());
+            dto.setAnswerDate(ca.getDateAndTime());
+            dto.setAppointmentDate(a.getDateAndTime());
+
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    @Override
+    public ComplaintInfoDto getComplaintInfo(int id){
+        Complaint complaint = complaintRepository.findById(id).orElseThrow(() -> new RuntimeException("Complaint not found"));
+        Appointment appointment = appointmentRepository.findById(complaint.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment not found"));
+        UserEntity patient = userRepository.findById(appointment.getPatientId()).orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        ComplaintInfoDto dto = new ComplaintInfoDto();
+        dto.setId(complaint.getId());
+        dto.setComplaintDate(complaint.getDateAndTime());
+        dto.setAppointmentDate(appointment.getDateAndTime());
+        dto.setContent(complaint.getContent());
+        dto.setPatientFullName(patient.getName() + " " + patient.getLastname());
+
+        return dto;
+    }
+
 }

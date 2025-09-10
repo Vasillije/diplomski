@@ -1,62 +1,83 @@
 <div class="background">
-    <div class="center1" id="centerDiv">
-        <form #filterForm="ngForm" (ngSubmit)="filterByDate(filterForm.value)">
-        <mat-form-field>
+  <div class="header-container">
+    <h1>BOOK APPOINTMENT</h1>
+
+      <div class="filter-row">
+        <form #filterForm="ngForm" class="filter-form">
+            <mat-form-field class="inputName">
             <mat-label>Choose a date</mat-label>
-            <input matInput [matDatepicker]="picker" [matDatepickerFilter]="myFilter"  [min]="minDate" name="appointmentDate" ngModel> 
+            <input matInput 
+                    [matDatepicker]="picker" 
+                    [(ngModel)]="selectedDate"  
+                    [matDatepickerFilter]="myFilter"
+                    [min]="minDate" 
+                    name="appointmentDate"
+                    (dateChange)="onDateChange($event.value)"> 
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <button mat-button class="btn" id="dateBtn">FILTER</button>
-        </form>
-        <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)">
-            <mat-form-field class="inputName">
-                <mat-label>Nutritionist's name</mat-label>
-                <input matInput type="text" name="username" ngModel>
             </mat-form-field>
-            <button mat-button class="btn" id="dateBtn">FILTER</button>
         </form>
     </div>
-    <div class="buttons">
-        <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
-        <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
-        <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
-        <button mat-button class="btn" (click)="reset()" >RESET</button>
+
+    <div class="filter-row" *ngIf="selectedDate">
+        <mat-form-field class="inputName">  
+            <mat-label>Choose nutritionist</mat-label>
+            <mat-select [(ngModel)]="selectedNutritionistName" name="name" required
+                        (selectionChange)="onNameChange($event.value)">
+                <mat-option *ngFor="let name of nutritionistNames" [value]="name">
+                {{ name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
     </div>
-    <div class="center">
+
+    <div class="filter-row" *ngIf="selectedNutritionistName && selectedDate">
+        <mat-form-field class="inputName">  
+            <mat-label>Choose type</mat-label>
+            <mat-select [(ngModel)]="selectedType" name="type" required
+                        (selectionChange)="onTypeChange($event.value)">
+                <mat-option *ngFor="let type of availableTypes" [value]="type">
+                {{ type }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    
+
+      <div *ngIf="selectedType && selectedDate && selectedNutritionistName" class="divv">
+
+      <!-- Tabela -->
+      <div class="center">
         <div class="table-container">
-        <table mat-table [dataSource]="dataSource">
-    
-        <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef> DATE </th>
-            <td mat-cell *matCellDef="let element"> {{element.date}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef> TYPE </th>
-            <td mat-cell *matCellDef="let element; let i = index"> {{appointmentType[i]}} </td>
-        </ng-container>
+          <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef> DATE </th>
+              <td mat-cell *matCellDef="let element"> {{element.date | date:'dd.MM.yyyy - HH:mm'}} </td>
+            </ng-container>
 
-        <ng-container matColumnDef="duration">
-            <th mat-header-cell *matHeaderCellDef> DURATION(MIN) </th>
-            <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="nutritionist">
-            <th mat-header-cell *matHeaderCellDef> NUTRITIONIST </th>
-            <td mat-cell *matCellDef="let element; let i = index"> {{nutritionistFullName[i]}} </td>
-        </ng-container>
+            <ng-container matColumnDef="duration">
+              <th mat-header-cell *matHeaderCellDef> DURATION </th>
+              <td mat-cell *matCellDef="let element"> {{element.duration}} min </td>
+            </ng-container>
 
-        <ng-container matColumnDef="book">
-            <th mat-header-cell *matHeaderCellDef> BOOK APPOINTMENT </th>
-            <td mat-cell *matCellDef="let element">
-              <button class="tablebtn" mat-button (click)="bookAppointment(element)">BOOK</button>
-            </td>
-          </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" sticky></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+            <ng-container matColumnDef="nutritionist">
+              <th mat-header-cell *matHeaderCellDef> NUTRITIONIST </th>
+              <td mat-cell *matCellDef="let element; let i = index"> {{element.nutritionistFullName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="book">
+              <th mat-header-cell *matHeaderCellDef> BOOK APPOINTMENT </th>
+              <td mat-cell *matCellDef="let element">
+                <button class="tablebtn" mat-button (click)="book(element)">BOOK</button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" sticky></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>

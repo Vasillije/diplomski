@@ -1,9 +1,6 @@
 package com.sportscenter.nutritionist.service;
 
-import com.sportscenter.nutritionist.dto.complaint.AnswerComplaintDto;
-import com.sportscenter.nutritionist.dto.complaint.ComplaintAndAnswerDto;
-import com.sportscenter.nutritionist.dto.complaint.CreateComplaintDto;
-import com.sportscenter.nutritionist.dto.complaint.NutritionistComplaintsDto;
+import com.sportscenter.nutritionist.dto.complaint.*;
 
 import java.util.List;
 
@@ -12,4 +9,6 @@ public interface ComplaintService {
     public List<NutritionistComplaintsDto> getComplaintsByNutritionistId(int nutritionistId);
     public void answerComplaint(AnswerComplaintDto dto);
     public List<ComplaintAndAnswerDto> getComplaintsAndAnswers();
+    public List<AnsweredNutritionistComplaintsDto> getAnsweredComplaintsByNutritionistId(int nutritionistId);
+    public ComplaintInfoDto getComplaintInfo(int id);
 }

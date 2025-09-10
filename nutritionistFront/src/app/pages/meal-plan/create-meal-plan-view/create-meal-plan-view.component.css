@@ -1,81 +1,104 @@
-.background{
+.background {
     height: 100vh;
     width: 100%;
-    background-color: rgb(247, 247, 245);
-}
-
-.tablebtn{
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
-    width: 70%;
-    margin-left: 15%;
-  }
-
-  .center{
-    position: absolute; 
     display: flex;
-    flex-direction: row;
-    padding: 20px;
-    border-radius: 15px;
+    flex-direction: column;
     align-items: center;
+}
+
+.filter-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
     width: 80%;
-    margin-left: 5%;
-  }
+    max-width: 800px;
+}
 
-  .mat-mdc-header-row {
-    background-color: rgb(13, 19, 54) !important;
-    margin-left: 10px !important;
-  }
-  
-  .mat-mdc-header-cell {
+.filter-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.form-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.picker {
+    width: 145px;
+}
+
+.inputName {
+    width: 240px;
+}
+
+.btn {
+    background-color: #012a5b !important;
     color: rgb(247, 247, 245) !important;
-  } 
-  
-  .mat-mdc-body {
+    border-radius: 0%;
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-family: Georgia, serif !important;
+    color: #012a5b;
+    text-align: center;
+    font-size: 30px;
+    margin: 30px 0;
+    width: 100%;
+}
+
+.center {
+    width: 80%;
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Ostali CSS stilovi ostaju isti */
+.tablebtn {
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    width: 70%;
+}
+
+.mat-mdc-header-row {
+    background-color: #012a5b !important;
+}
+
+.mat-mdc-header-cell {
+    color: rgb(247, 247, 245) !important;
+} 
+
+.mat-mdc-body {
     border: none !important;
-  } 
-  
-  
-  .mat-mdc-cell {
+}
+
+.mat-mdc-cell {
     border: none !important;
-  }
-  
-  ::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
-    /* background-color: rgb(145, 255, 153); */
+}
+
+::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
     background-color: rgb(211, 211, 211);
-  }
-
-  .picker{
-  margin-left: 20px;
-  width: 145px;
-}
-
-.filter{
-  padding: 20px;
-  border-radius: 15px;
-  align-items: center;
-  width: 80%;
-  margin-left: 5%;
-  padding-top: 5%;
-}
-
-.inputName{
-  width: 240px;
-  margin-left: 20px;
 }
 
 .table-container {
-  max-height: 300px;
-  overflow-y: auto;
-  width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
 }
-
-.btn{
-  margin-left: 15px;
-  margin-top: 20px;
-  width : 150px;
-  background-color: rgb(13, 19, 54);
-  color: rgb(247, 247, 245);
-  margin-bottom: 30px;
-}
-  

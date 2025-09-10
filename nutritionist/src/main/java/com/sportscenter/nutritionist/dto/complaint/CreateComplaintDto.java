@@ -10,4 +10,5 @@ public class CreateComplaintDto {
     private String content;
     private int patientId;
     private Date date;
+    private String appointmentType;
 }

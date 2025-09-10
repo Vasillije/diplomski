@@ -1,16 +1,17 @@
-mat-form-field{
-    width : 300px;
-    margin-left : 15px;
+mat-form-field {
+    width: 300px;
+    margin-left: 15px;
     margin-top: 100px;
 }
 
-.background{
+.background {
     height: 100vh;
     width: 100%;
-    background-color: rgb(247, 247, 245);
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-h1{
+h1 {
     margin-top: -80px;
     padding-top: 150px;
     text-align: center;
@@ -19,51 +20,86 @@ h1{
 }
 
 .center1 {
-    position: absolute; 
-    left: 50%;
-    transform: translate(-50%);
     display: flex;
     flex-direction: column;
-    gap: 10px;
     align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.polje{
+.polje {
     margin-top: 20px; 
 }
 
-.btn{
+.btn {
     margin-left: 880px;
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
 }
 
-table {
+/* CONTAINER ZA TABELU SA SCROLLOM */
+.table-container {
+    max-height: 300px;
+    overflow-y: auto;
     width: 100%;
-    background-color: rgb(247, 247, 245);
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     margin-top: 25px;
 }
 
+/* TABELA */
+table {
+    width: 100%;
+    background-color: rgb(247, 247, 245);
+}
+
+/* HEADER */
 .mat-mdc-header-row {
-  background-color: rgb(13, 19, 54) !important;
-  margin-left: 10px !important;
+    background-color: rgb(13, 19, 54) !important;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .mat-mdc-header-cell {
-  color: rgb(247, 247, 245) !important;
+    color: rgb(247, 247, 245) !important;
+    position: sticky;
+    top: 0;
+    background-color: rgb(13, 19, 54) !important;
 } 
 
+/* ĆELIJE */
 .mat-mdc-body {
-  border: none !important;
+    border: none !important;
 } 
-
 
 .mat-mdc-cell {
-  border: none !important;
+    border: none !important;
+    padding: 8px 16px;
 }
 
+/* ZEBRA EFFECT */
 ::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
-  /* background-color: rgb(145, 255, 153); */
-  background-color: rgb(211, 211, 211);
+    background-color: rgb(211, 211, 211);
 }
-  
+
+/* STILIZOVANJE SCROLLBARA (opciono) */
+.table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

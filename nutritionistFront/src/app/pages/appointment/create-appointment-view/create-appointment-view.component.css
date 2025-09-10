@@ -1,0 +1,90 @@
+mat-form-field{
+    width : 290px;
+    margin-left : 15px;
+}
+
+.background{
+    height: 100vh;
+    width: 100%;
+}
+
+.appointment-info{
+  color: #012a5b;
+}
+
+h1{
+    font-family: Georgia, serif !important;
+    color: #012a5b;
+    margin-top: -80px;
+    padding-top: 150px;
+    text-align: center;
+    font-size: 30px;
+}
+
+.center1 {
+    position: absolute; 
+    left: 50%;
+    transform: translate(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.frm{
+  margin-top: -50px;
+}
+
+.polje{
+    margin-top: 20px; 
+}
+
+.btn{
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    margin-left: 5px;
+    margin-bottom: 15px;
+}
+
+.btn-down{
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    margin-left: 70px;
+    margin-bottom: 15px;
+    width: 200px;
+}
+
+table {
+    width: 100%;
+    background-color: rgb(247, 247, 245);
+    margin-top: 25px;
+}
+
+.mat-mdc-header-row {
+  background-color: #012a5b !important;
+  margin-left: 10px !important;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.mat-mdc-header-cell {
+  color: rgb(247, 247, 245) !important;
+} 
+
+.mat-mdc-body {
+  border: none !important;
+} 
+
+
+.mat-mdc-cell {
+  border: none !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
+  /* background-color: rgb(145, 255, 153); */
+  background-color: rgb(211, 211, 211);
+}
+  

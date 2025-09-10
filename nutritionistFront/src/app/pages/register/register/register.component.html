@@ -1,8 +1,8 @@
-<div class="background">
+<div class="register-container">
     <div class="center">
         <img src="register1.jpg" class="register-img" alt="Register">
-    <div class="frm">
-        <h1><b>REGISTER</b></h1>
+        <div class="frm">
+            <h1><b>REGISTER</b></h1>
             <form #registerForm="ngForm" (ngSubmit)="register(registerForm.value)">
                 <mat-form-field class="field">
                     <mat-label>Email</mat-label>
@@ -25,6 +25,6 @@
                 </mat-form-field>
                 <button mat-button class="btn">Register</button>
             </form>
-            </div>
+        </div>
     </div>
 </div>

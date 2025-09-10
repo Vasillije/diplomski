@@ -3,7 +3,7 @@ import { MealPlanService } from '../service/meal-plan.service';
 import { LoginService } from '../../login/service/login.service';
 import { NutritionistMealPlanDto } from '../interfaces/NutritionistMealPlanDto';
 import { ActivatedRoute, Route, Router } from '@angular/router';
-import { UserHealthInfoDto } from '../interfaces/UserHealthInfoDto';
+import { UserInfoDto } from '../interfaces/UserInfoDto';
 
 @Component({
   selector: 'app-create-meal-plan-patient-view',
@@ -13,12 +13,7 @@ import { UserHealthInfoDto } from '../interfaces/UserHealthInfoDto';
   styleUrl: './create-meal-plan-patient-view.component.css',
 })
 export class CreateMealPlanPatientViewComponent {
-  constructor(
-    private mealPlanService: MealPlanService,
-    private loginService: LoginService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private mealPlanService: MealPlanService,private loginService: LoginService,private route: ActivatedRoute,private router: Router) {}
 
   appointmentId!: number;
 
@@ -28,6 +23,9 @@ export class CreateMealPlanPatientViewComponent {
   genderText: string = '';
 
   userInfo: any;
+  username : string = '';
+
+  
 
   ngOnInit(): void {
     this.appointmentId = +this.route.snapshot.paramMap.get('id')!;
@@ -36,12 +34,14 @@ export class CreateMealPlanPatientViewComponent {
   }
 
   getUsersInfo() {
+
     this.mealPlanService
-      .getUserHealthInfoByAppointmentId(this.appointmentId)
+      .getUserInfoByAppointmentId(this.appointmentId)
       .subscribe(
         (data) => {
           this.userInfo = data;
           console.log(this.userInfo);
+          this.username = this.userInfo.username.toUpperCase();
           this.fillInfo();
         },
         (error) => alert('error')
@@ -99,7 +99,7 @@ export class CreateMealPlanPatientViewComponent {
     };
 
     if (content == '') {
-      alert('Cant create empty meal plan');
+      alert("Can't create empty meal plan");
       return;
     }
 
@@ -108,9 +108,13 @@ export class CreateMealPlanPatientViewComponent {
     this.mealPlanService.createMealPlan(dto).subscribe(
       (data) => {
         alert('Meal plan created');
-        this.router.navigate(['']);
+        this.router.navigate(['create-meal-plan-view']);
       },
       (error) => alert('Could not create meal plan')
     );
+  }
+
+  cancel(){
+    this.router.navigate(['create-meal-plan-view']);
   }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
@@ -16,6 +17,7 @@ public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Async
     public void sendEmail(String toEmail, String subject, String body){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("dojcinovvasilije2@gmail.com");
@@ -26,6 +28,7 @@ public class EmailSenderService {
         mailSender.send(message);
     }
 
+    @Async
     public void sendEmailWithAttachment(String toEmail, String subject, String body, ByteArrayOutputStream pdfStream) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);

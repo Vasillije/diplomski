@@ -12,4 +12,5 @@ public class NutritionistComplaintsDto {
     private String content;
     private String patientsFullName;
     private Date appointmentDate;
+    private Date complaintDate;
 }

@@ -1,0 +1,49 @@
+<div class="background">
+    <div class="center">
+        <h2>HEALTH INFO</h2>
+        <form #healthInfoForm="ngForm" (ngSubmit)="changeHealthInfo(healthInfoForm.value)">
+          
+              <mat-form-field appearance="fill">
+                <mat-label>Gender</mat-label>
+                <mat-select name="gender" [(ngModel)]="user.gender">
+                  <mat-option *ngFor="let option of genderOptions" [value]="option.value">
+                    {{ option.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Physical activity</mat-label>
+                <mat-select name="physicalActivity" [(ngModel)]="user.physicalActivity">
+                  <mat-option *ngFor="let option of activityOptions" [value]="option.value">
+                    {{ option.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+
+            <mat-form-field>
+                <mat-label>Weight</mat-label>
+                <input matInput type="text" name="weight" [(ngModel)]="user.weight">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Height</mat-label>
+                <input matInput type="text" name="height" [(ngModel)]="user.height">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Age</mat-label>
+                <input matInput type="text" name="age" [(ngModel)]="user.age">
+            </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Goal</mat-label>
+                <mat-select name="goal" [(ngModel)]="user.goal">
+                  <mat-option *ngFor="let option of goalOptions" [value]="option.value">
+                    {{ option.viewValue }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            <button mat-button class="btn">Update health info</button>
+        </form>
+    </div>
+</div>

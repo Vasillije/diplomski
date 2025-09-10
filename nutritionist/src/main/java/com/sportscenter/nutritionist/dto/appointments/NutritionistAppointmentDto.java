@@ -9,6 +9,5 @@ public class NutritionistAppointmentDto {
     private int appointmentId;
     private Date date;
     private int duration;
-    private String patientName;
-    private String patientLastName;
+    private String patientFullName;
 }

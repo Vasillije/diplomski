@@ -7,20 +7,23 @@ import com.sportscenter.nutritionist.models.UserEntity;
 import com.sportscenter.nutritionist.repository.AppointmentRepository;
 import com.sportscenter.nutritionist.repository.UserRepository;
 import com.sportscenter.nutritionist.service.AppointmentService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentRepository appointmentRepository;
     private UserRepository userRepository;
     private EmailSenderService senderService;
+    private static final int CONTROL_OFFSET_MINUTES = 20;
+    private static final int EXAMINATION_OFFSET_MINUTES = 40;
 
     @Autowired
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository, UserRepository userRepository, EmailSenderService senderService){
@@ -57,7 +60,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return dto;
     }
 
-    @Override
+   /* @Override
     public Boolean isAppointmentOverlapping(CreateAppointmentDto dto){
 
         Date dNewStartTime = dto.getDateAndTime();
@@ -94,6 +97,31 @@ public class AppointmentServiceImpl implements AppointmentService {
             }
         }
         return false;
+    }*/
+
+    @Override
+    public Boolean isAppointmentOverlapping(CreateAppointmentDto dto) {
+        Date dNewStartTime = dto.getDateAndTime();
+        Date dNewFinishTime = new Date(dto.getDateAndTime().getTime());
+        dNewFinishTime.setTime(dNewFinishTime.getTime() + (long) dto.getDuration() * 60 * 1000);
+
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByNutritionistId(dto.getNutritionistId());
+
+        for (Appointment a : appointments) {
+            Date dStartTime = a.getDateAndTime();
+            Date dFinishTime = new Date(a.getDateAndTime().getTime());
+            dFinishTime.setTime(dFinishTime.getTime() + (long) a.getDuration() * 60 * 1000);
+
+            var newStartTime = dNewStartTime.toInstant();
+            var newFinishTime = dNewFinishTime.toInstant();
+            var startTime = dStartTime.toInstant();
+            var finishTime = dFinishTime.toInstant();
+
+            if (newStartTime.isBefore(finishTime) && newFinishTime.isAfter(startTime)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -124,8 +152,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             dto.setDate(a.getDateAndTime());
             dto.setDuration(a.getDuration());
             dto.setNutritionistId(a.getNutritionistId());
-            dto.setNutritionistName(user.getName());
-            dto.setNutritionistLastName(user.getLastname());
+            dto.setNutritionistFullName(user.getName() + ' ' + user.getLastname());
 
             appointmentDtos.add(dto);
         }
@@ -141,9 +168,11 @@ public class AppointmentServiceImpl implements AppointmentService {
             dto.setAppointmentId(a.getId());
             dto.setDate(a.getDateAndTime());
             dto.setDuration(a.getDuration());
-            dto.setNutritionistName(user.getName());
-            dto.setNutritionistLastName(user.getLastname());
+            dto.setNutritionistFullName(user.getName() + ' ' + user.getLastname());
             dto.setHasComplaint(a.isHasComplaint());
+            dto.setDateBooked(a.getDateBooked());
+            dto.setNutritionistId(user.getId());
+            dto.setType(a.getType());
 
             appointmentDtos.add(dto);
         }
@@ -163,11 +192,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
             if(a.getPatientId() != 0) {
                 UserEntity user = userRepository.findById(a.getPatientId()).orElseThrow(() -> new RuntimeException("User not found"));
-                dto.setPatientName(user.getName());
-                dto.setPatientLastName(user.getLastname());
+                dto.setPatientFullName(user.getName() + " " + user.getLastname());
             } else{
-                dto.setPatientName("");
-                dto.setPatientLastName("");
+                dto.setPatientFullName("");
             }
             appointmentDtos.add(dto);
         }
@@ -175,38 +202,35 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void bookAppointment(BookAppointmentDto dto){
+    public void cancelAppointmentPatient(CancelAppointmentDto dto){
         Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment not found"));
-        appointment.setPatientId(dto.getPatientId());
-        appointment.setAvailable(false);
-        appointmentRepository.save(appointment);
-
-        UserEntity user = userRepository.findById(appointment.getPatientId()).orElseThrow(() -> new RuntimeException("User not found"));
-        List<Integer> appointmentIds = user.getAppointmentIds();
-        if(appointmentIds == null){
-            appointmentIds = new ArrayList<>();
-        }
-        appointmentIds.add(appointment.getId());
-        user.setAppointmentIds(appointmentIds);
-        userRepository.save(user);
-
-        UserEntity nutritionist = userRepository.findById(appointment.getNutritionistId()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        senderService.sendEmail(nutritionist.getEmail(), "", "User with username "+ user.getUsername()+ " booked appointment with id "
-                + appointment.getId());
-    }
-
-    @Override
-    public void cancelAppointmentPatient(int appointmentId){
-        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
         UserEntity user = userRepository.findById(appointment.getPatientId()).orElseThrow(() -> new RuntimeException("Patient not found"));
         UserEntity nutritionist = userRepository.findById(appointment.getNutritionistId()).orElseThrow(() -> new RuntimeException("Nutritionist not found"));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy - HH:mm");
+        String formattedDate = sdf.format(appointment.getDateAndTime());
 
         Date now = new Date();
         Date next24Hours = new Date(now.getTime() + (24 * 60 * 60 * 1000));
 
         appointment.setAvailable(true);
         appointment.setPatientId(0);
+
+        List<Appointment> nextAppointments = appointmentRepository.findAppointmentsByDateBooked(appointment.getDateBooked());
+
+        List<Integer> appointmentIds = user.getAppointmentIds();
+        appointmentIds.remove(Integer.valueOf(appointment.getId()));
+        appointmentRepository.save(appointment);
+
+        if(!nextAppointments.isEmpty()){
+            for(Appointment a : nextAppointments){
+                a.setAvailable(true);
+                a.setPatientId(0);
+                appointmentIds.remove(Integer.valueOf(a.getId()));
+                appointmentRepository.save(a);
+            }
+        }
+
+        user.setAppointmentIds(appointmentIds);
 
         if(appointment.getDateAndTime().before(next24Hours)){
             user.setPenaltyPoints(user.getPenaltyPoints() + 2);
@@ -219,15 +243,20 @@ public class AppointmentServiceImpl implements AppointmentService {
             user.setBlocked(true);
         }
 
-        List<Integer> appointmentIds = user.getAppointmentIds();
-        appointmentIds.remove(Integer.valueOf(appointment.getId()));
-        user.setAppointmentIds(appointmentIds);
 
-        appointmentRepository.save(appointment);
+
+
         userRepository.save(user);
 
-        senderService.sendEmail(nutritionist.getEmail(), "", "User with username "+ user.getUsername()+
-                " cancelled appointment with id "+ appointmentId);
+        String message = String.format(
+                "Patient %s %s canceled %s starting at %s",
+                user.getName(),
+                user.getLastname(),
+                dto.getType().toLowerCase(),
+                formattedDate
+        );
+
+        senderService.sendEmail(nutritionist.getEmail(), "", message);
     }
 
     @Override
@@ -236,7 +265,17 @@ public class AppointmentServiceImpl implements AppointmentService {
         UserEntity nutritionist = userRepository.findById(appointment.getNutritionistId()).orElseThrow(() -> new RuntimeException("Patient not found"));
         if(appointment.getPatientId() != 0) {
             UserEntity patient = userRepository.findById(appointment.getPatientId()).orElseThrow(() -> new RuntimeException("Patient not found"));
-            appointment.setPatientId(0);
+            List<Appointment> appointments = appointmentRepository.findAppointmentsByDateBooked(appointment.getDateBooked());
+            if(!appointments.isEmpty()){
+                for(Appointment a : appointments){
+                    a.setPatientId(0);
+                    a.setDateBooked(null);
+                    a.setType(null);
+                    a.setAvailable(true);
+                    appointmentRepository.save(a);
+                }
+            }
+
             nutritionist.setPenaltyPoints(nutritionist.getPenaltyPoints() + 1);
             senderService.sendEmail("", "Appointment canceled", "Nutritionist with username "+ nutritionist.getUsername()+
                     " has cancelled appointment that starts at "+appointment.getDateAndTime());
@@ -249,7 +288,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<PastBookedAppointmentsByNutritionistIdDto> getPastBookedAppointmentsByNutritionistId(int id){
+    public List<PastBookedAppointmentsByNutritionistIdDto> getPastBookedExaminationsByNutritionistId(int id){
         List<Appointment> appointments = appointmentRepository.findAppointmentsByNutritionistId(id);
         List<PastBookedAppointmentsByNutritionistIdDto> dtos = new ArrayList<>();
         List<Appointment> validAppointments = new ArrayList<>();
@@ -257,7 +296,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         for(Appointment a : appointments){
             if(!a.isAvailable() && a.getDateAndTime().toInstant().isBefore(currentDate.toInstant()) && a.getPatientId() != 0
-            && a.getDuration() == 60 && !a.isHasMealPlan()){
+            && "EXAMINATION".equals(a.getType()) && !a.isHasMealPlan()){
                 validAppointments.add(a);
             }
         }
@@ -270,6 +309,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             dto.setDuration(a.getDuration());
             dto.setPatientId(a.getPatientId());
             dto.setPatientsFullName(patient.getName() + ' ' + patient.getLastname());
+            dto.setDateBooked(a.getDateBooked());
             dtos.add(dto);
         }
         return dtos;
@@ -308,4 +348,139 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return dtos;
     }
+
+    @Override
+    @Transactional
+    public void book(BookDto dto){
+
+        try {
+            Appointment appointment = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(() ->
+                    new IllegalArgumentException("Termin sa ID " + dto.getAppointmentId() + " nije pronađen"));
+
+            Date currentDate = new Date();
+            int patientId = dto.getPatientId();
+            int nutritionistId = appointment.getNutritionistId();
+            Date appointmentDate = appointment.getDateAndTime();
+            bookAppointment(patientId, appointment, currentDate, dto.getType());
+            if(dto.getType().equals("CONTROL") || dto.getType().equals("EXAMINATION")){
+                bookNextAppointment(appointmentDate, nutritionistId, patientId, currentDate, CONTROL_OFFSET_MINUTES, dto.getType());
+                if(dto.getType().equals("EXAMINATION")) {
+                    bookNextAppointment(appointmentDate, nutritionistId, patientId, currentDate, EXAMINATION_OFFSET_MINUTES, dto.getType());
+                }
+            }
+
+            notifyNutritionist(patientId, nutritionistId, appointmentDate, dto.getType());
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new IllegalStateException("Termin je već zauzet. Molimo osvežite stranicu i pokušajte ponovo.");
+        }
+
+    }
+
+    public void bookNextAppointment(Date appointmentDate, int nutritionistId, int patientId, Date currentDate, int offsetMinutes, String type){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(appointmentDate);
+        cal.add(Calendar.MINUTE, offsetMinutes);
+        Date newDateTime = cal.getTime();
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByDateAndTimeAndNutritionistId(newDateTime, nutritionistId);
+
+        if (appointments.isEmpty()) {
+            throw new IllegalArgumentException("Nije pronađen termin za nutritionistu " + nutritionistId +
+                " u vreme " + newDateTime + " (offset: " + offsetMinutes + " minuta)");
+        }
+
+        bookAppointment(patientId, appointments.get(0), currentDate, type);
+    }
+
+    public void bookAppointment(int patientId, Appointment appointment, Date currentDate, String type){
+        if (!appointment.isAvailable()) {
+            throw new IllegalStateException("Termin je već zauzet");
+        }
+
+        appointment.setPatientId(patientId);
+        appointment.setAvailable(false);
+        appointment.setDateBooked(currentDate);
+        appointment.setType(type);
+        appointmentRepository.save(appointment);
+
+        UserEntity user = userRepository.findById(appointment.getPatientId()).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Integer> appointmentIds = user.getAppointmentIds();
+        if(appointmentIds == null){
+            appointmentIds = new ArrayList<>();
+        }
+        appointmentIds.add(appointment.getId());
+        user.setAppointmentIds(appointmentIds);
+        userRepository.save(user);
+    }
+
+    public void notifyNutritionist(int patientId, int nutritionistId, Date startDate, String type){
+        UserEntity nutritionist = userRepository.findById(nutritionistId).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity patient = userRepository.findById(patientId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy - HH:mm");
+        String formattedDate = sdf.format(startDate);
+
+        String message = String.format(
+                "Patient %s %s booked %s starting at %s",
+                patient.getName(),
+                patient.getLastname(),
+                type.toLowerCase(),
+                formattedDate
+        );
+
+        senderService.sendEmail(nutritionist.getEmail(), "", message);
+    }
+
+    public AppointmentInfoDto getAppointmentInfo(int id){
+        Appointment a = appointmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Appointment not found"));
+        UserEntity nutritionist = userRepository.findById(a.getNutritionistId()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        AppointmentInfoDto dto = new AppointmentInfoDto();
+        dto.setAppointmentDate(a.getDateAndTime());
+        dto.setNutritionistFullName(nutritionist.getName() + ' ' + nutritionist.getLastname());
+        dto.setType(a.getType());
+        return dto;
+    }
+
+    @Scheduled(cron = "0 0 8 * * ?") // svaki dan u 8:00
+    public void notifyAppointmentIn2Days() {
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.DAY_OF_MONTH, 2); // dodaj 2 dana
+        Date twoDaysLater = cal.getTime();
+
+        List<Appointment> appointments = appointmentRepository.findAppointmentsInNext2Days(now, twoDaysLater);
+
+        // Map za praćenje poslatih mejlova po dateBooked
+        Set<Date> processedDateBooked = new HashSet<>();
+
+        for (Appointment a : appointments) {
+            // ako je već poslat mejl za ovaj dateBooked, preskoči
+            if (processedDateBooked.contains(a.getDateBooked())) continue;
+
+            UserEntity nutritionist = userRepository.findById(a.getNutritionistId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            UserEntity patient = userRepository.findById(a.getPatientId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy - HH:mm");
+            String formattedDate = sdf.format(a.getDateAndTime());
+
+            String message = String.format(
+                    "REMINDER! Patient %s %s booked %s starting at %s, nutritionist: %s %s",
+                    patient.getName(),
+                    patient.getLastname(),
+                    a.getType().toLowerCase(),
+                    formattedDate,
+                    nutritionist.getName(),
+                    nutritionist.getLastname()
+            );
+
+            senderService.sendEmail(nutritionist.getEmail(), "REMINDER", message);
+
+            // označimo dateBooked kao obrađen
+            processedDateBooked.add(a.getDateBooked());
+        }
+    }
+
 }

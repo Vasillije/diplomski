@@ -1,10 +1,10 @@
 .background{
     height: 100vh;
     width: 100%;
-    background-color: rgb(247, 247, 245); 
 }
 
 .center{
+    background-color: rgb(247, 247, 245); 
     position: absolute; 
     top: 50%;
     left: 50%;
@@ -31,9 +31,10 @@
 .btn{
     background-color:rgba(208, 197, 238, 0.637);
     align-self: center;
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
-    width: 95%;
+    background-color: #012a5b;
+    color: rgb(247, 247, 245) !important;
+    width: 93%;
+    border-radius: 0%;
 }
 
 .user-img{

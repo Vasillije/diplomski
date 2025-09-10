@@ -6,12 +6,13 @@
 
 .slika{
     width: 100%;
+    position: relative;
 }
 
 .profilna{
     width: 100%;
     height: 100vh;
-    filter: brightness(0.5);
+    filter: brightness(0.4);
 }
 
 .over-img{
@@ -49,10 +50,11 @@
 }
 
 .nutricionista{
-    width: 80%; /* Slika zauzima celu širinu kutije */
-    height: auto; /* Zadržava proporcije slike */
+    width: 550px; /* Slika zauzima celu širinu kutije */
+    height: 330px; /* Zadržava proporcije slike */
     border-radius: 5px; /* Zaobljeni uglovi slike */
     margin-left: 80px;
+    margin-top: 80px;
 }
 
 

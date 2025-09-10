@@ -5,4 +5,7 @@ export interface NutritionistComplaintsDto{
     content : string
     patientsFullName : string,
     appointmentDate : Date,
+    complaintDate : Date,
+    formattedAppointmentDate? : string,
+    formattedComplaintDate? : string
 }

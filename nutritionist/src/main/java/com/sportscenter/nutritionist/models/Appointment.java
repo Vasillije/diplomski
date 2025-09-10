@@ -27,4 +27,10 @@ public class Appointment {
     private boolean hasComplaintAnswer = false;
     @Column(nullable = true)
     private boolean hasMealPlan = false;
+    @Column(nullable = true)
+    private Date dateBooked;
+    @Column(nullable = true)
+    private String type;
+    @Version
+    private int version;
 }

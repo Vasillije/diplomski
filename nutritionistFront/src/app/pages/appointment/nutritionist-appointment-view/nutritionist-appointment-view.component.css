@@ -10,6 +10,15 @@ table {
   border-collapse: collapse;
 }
 
+h1 {
+  margin-left: 0; /* Ukloni marginu sa leve strane */
+  font-family: Georgia, serif !important;
+  font-size: 30px;
+  color: #012a5b;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 20px;
+}
 
 .center{
   position: absolute; 
@@ -23,23 +32,27 @@ table {
   margin-top: 5%;
 }
 
-.btn{
-  margin-left: 15px;
-  margin-top: 20px;
-  width : 150px;
-  background-color: rgb(13, 19, 54);
-  color: rgb(247, 247, 245);
+.btn {
+  margin: 10px; /* Umesto margin-left */
+  width: 150px;
+  background-color: #012a5b;
+  color: rgb(247, 247, 245) !important;
+  border-radius: 0%;
 }
 
 .tablebtn{
-  background-color: rgb(13, 19, 54);
-  color: rgb(247, 247, 245);
+  background-color: #012a5b;
+  color: rgb(247, 247, 245) !important;
   width: 70%;
+  border-radius: 0%;
 }
 
 .mat-mdc-header-row {
-  background-color: rgb(13, 19, 54) !important;
+  background-color: #012a5b !important;
   margin-left: 10px !important;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .mat-mdc-header-cell {
@@ -63,21 +76,51 @@ table {
   margin-bottom: 35px;
 }
 
-.picker{
-  margin-left: 20px;
+.picker {
   width: 145px;
+  height: 100%;
 }
 
-.filter{
+.filter {
   padding: 20px;
   border-radius: 15px;
   align-items: center;
   width: 80%;
   margin-left: 5%;
-  margin-top: 5%;
+  margin-top: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.inputName{
+.inputName {
   width: 240px;
-  margin-left: 20px;
+  height: 100%;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .filter {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .picker, .inputName {
+    margin-bottom: 10px;
+  }
 }

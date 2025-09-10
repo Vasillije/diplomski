@@ -3,6 +3,7 @@ import { ComplaintService } from '../service/complaint.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../../login/service/login.service';
 import { AnswerComplaintDto } from '../interfaces/AnswerComplaintDto';
+import { ComplaintInfoDto } from '../interfaces/ComplaintInfoDto';
 
 @Component({
   selector: 'app-complaint-answer-view',
@@ -17,10 +18,22 @@ export class ComplaintAnswerViewComponent {
   
   id!: number;
   currentDate : Date = new Date();
+  complaintDto? : ComplaintInfoDto;
   
   ngOnInit(): void {
     this.id = +this.route.snapshot.paramMap.get('id')!;
-    console.log(this.id);
+    this.getComplaintInfo(this.id);
+  }
+
+  getComplaintInfo(id:number){
+    this.complaintService.getComplaintInfo(id).subscribe(
+      (data) =>{
+        this.complaintDto = data;
+        console.log(data);
+      },
+      (error) =>
+        alert("error gettinng complaint info")
+    );
   }
   
   answerComplaint(result: any) {
@@ -32,6 +45,11 @@ export class ComplaintAnswerViewComponent {
       date: this.currentDate
     };
 
+    if(result.answer == ""){
+      alert("Answer can not be empty")
+      return;
+    }
+
     if(dto.content.length > 255){
       alert("Content is too long. Max is 255 characters!");
       return;
@@ -40,11 +58,15 @@ export class ComplaintAnswerViewComponent {
     this.complaintService.answerComplaint(dto).subscribe(
       (data) =>{
         alert("Answer sent successfully");
-        this.router.navigate(['']);
+        this.router.navigate(['nutritionist-complaints-view']);
       },
       (error)=>
         alert("Errror answering to complaint")
     );
+  }
+
+  goBack() {
+    this.router.navigate(["nutritionist-complaints-view"]);
   }
 
 }

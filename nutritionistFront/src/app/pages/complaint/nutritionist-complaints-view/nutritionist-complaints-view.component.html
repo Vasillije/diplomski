@@ -1,36 +1,93 @@
 <div class="background">
     <div class="filter">
-        <form #filterForm="ngForm" (ngSubmit)="filterDate(filterForm.value)">
-            <mat-form-field class="picker">
-                <mat-label>Date from</mat-label>
-                <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFrom></mat-datepicker>
-            </mat-form-field>
+        <h1>COMPLAINTS</h1>
+        
+        <div class="filter-forms-container">
+            <form #filterAppointmentForm="ngForm" (ngSubmit)="filterDate(filterAppointmentForm.value)" class="filter-form">
+                <div class="form-row">
+                    <mat-form-field class="picker">
+                        <mat-label>Appointment date from</mat-label>
+                        <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom></mat-datepicker>
+                    </mat-form-field>
 
-            <mat-form-field class="picker">
-                <mat-label>Date to</mat-label>
-                <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                <mat-datepicker #pickerTo></mat-datepicker>
-            </mat-form-field>
-            <button mat-button class="btn" id="filterBtn">FILTER</button>
-        </form>
-        <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)">
-        <mat-form-field class="inputName">
-            <mat-label>Patients's name</mat-label>
-            <input matInput type="text" name="username" ngModel>
-        </mat-form-field>
+                    <mat-form-field class="picker">
+                        <mat-label>Appointment date to</mat-label>
+                        <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerTo></mat-datepicker>
+                    </mat-form-field>
                     <button mat-button class="btn" id="filterBtn">FILTER</button>
-        </form>
-        <button mat-button class="btn" (click)="reset()" >RESET FILTERS</button>
+                </div>
+            </form>
+
+            <form #filterComplaintForm="ngForm" (ngSubmit)="filterDateComplaint(filterComplaintForm.value)">
+                <div class="form-row">
+                    <mat-form-field class="picker">
+                        <mat-label>Complaint date from</mat-label>
+                        <input matInput [matDatepicker]="pickerFromComplaint" name="dateFrom" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFromComplaint"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFromComplaint></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="picker">
+                        <mat-label>Complaint date to</mat-label>
+                        <input matInput [matDatepicker]="pickerToComplaint" name="dateTo" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerToComplaint"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerToComplaint></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+                </div>
+            </form>
+
+             <form #filterAnswerForm="ngForm" *ngIf="showAnsweredComplaints" (ngSubmit)="filterDateAnswer(filterAnswerForm.value)">
+                <div class="form-row">
+                    <mat-form-field class="picker">
+                    <mat-label>Answer date from</mat-label>
+                    <input matInput [matDatepicker]="pickerFromAnswer" name="dateFrom" ngModel>
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerFromAnswer"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerFromAnswer></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="picker">
+                    <mat-label>Answer date to</mat-label>
+                    <input matInput [matDatepicker]="pickerToAnswer" name="dateTo" ngModel>
+                    <mat-datepicker-toggle matIconSuffix [for]="pickerToAnswer"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerToAnswer></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+                </div>
+            </form>
+
+            <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)" class="filter-form">
+                <div class="form-row">
+                    <mat-form-field class="inputName">
+                        <mat-label>Patient's name</mat-label>
+                        <input matInput type="text" name="username" ngModel>
+                    </mat-form-field>
+                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-row">
+            <button mat-button class="btn" (click)="getAnsweredComplaintsByNutritionistId()">ANSWERED COMPLAINTS</button>
+            <button mat-button class="btn" (click)="reset()">UNANSWERED COMPLAINTS</button>
+        </div>
     </div>
+    
     <div class="center">
-        <div class="table-container">
+        <div class="table-container" *ngIf="showUnansweredComplaints">
             <table mat-table [dataSource]="dataSource">
                 <ng-container matColumnDef="appointmentDate">
-                    <th mat-header-cell *matHeaderCellDef> DATE SUBMITED </th>
-                    <td mat-cell *matCellDef="let element"> {{element.appointmentDate}} </td>
+                    <th mat-header-cell *matHeaderCellDef>APPOINTMENT DATE </th>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedAppointmentDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="complaintDate">
+                    <th mat-header-cell *matHeaderCellDef> DATE SUBMITTED</th>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedComplaintDate}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="patientsFullName">
@@ -44,7 +101,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="answer">
-                    <th mat-header-cell *matHeaderCellDef> ANSWER COMPLAINT </th>
+                    <th mat-header-cell *matHeaderCellDef> ANSWER </th>
                     <td mat-cell *matCellDef="let element; let i = index"> 
                         <button mat-button color="warn" class="tablebtn" (click)="answerComplaint(element.id)">ANSWER</button>
                     </td>
@@ -53,5 +110,49 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
         </div>
+
+        <div class="table-container" *ngIf="showAnsweredComplaints">
+            <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="appointmentDate">
+                    <th mat-header-cell *matHeaderCellDef> APPOINTMENT DATE</th>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedAppointmentDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="complaintDate">
+                    <th mat-header-cell *matHeaderCellDef> DATE SUBMITTED</th>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedComplaintDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="answerDate">
+                    <th mat-header-cell *matHeaderCellDef> DATE ANSWERED</th>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedAnswerDate}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="patientsFullName">
+                    <th mat-header-cell *matHeaderCellDef> PATIENT </th>
+                    <td mat-cell *matCellDef="let element"> {{element.patientsFullName}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="content">
+                    <th mat-header-cell *matHeaderCellDef> COMPLAINT CONTENT </th>
+                    <td mat-cell *matCellDef="let element" class="wrap-content"> {{element.content}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="answerContent">
+                    <th mat-header-cell *matHeaderCellDef> COMPLAINT CONTENT </th>
+                    <td mat-cell *matCellDef="let element" class="wrap-content"> {{element.answerContent}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="answer">
+                    <th mat-header-cell *matHeaderCellDef> ANSWER </th>
+                    <td mat-cell *matCellDef="let element; let i = index"> 
+                        <button mat-button color="warn" class="tablebtn" (click)="answerComplaint(element.id)">ANSWER</button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsAnswered"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsAnswered;"></tr>
+            </table>
+        </div>
     </div>
 </div>
+

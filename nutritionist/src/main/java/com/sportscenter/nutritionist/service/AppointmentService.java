@@ -9,10 +9,13 @@ public interface AppointmentService {
     public List<AvailableAppointmentDto> getAvailableAppointments();
     public List<PatientAppointmentDto> getAppointmentsByPatientId(int id);
     public List<NutritionistAppointmentDto> getAppointmentsByNutritionistId(int id);
-    public void bookAppointment(BookAppointmentDto dto);
+    //public void bookAppointment(BookAppointmentDto dto);
     public Boolean isAppointmentOverlapping(CreateAppointmentDto dto);
-    public void cancelAppointmentPatient(int appointmentId);
+    public void cancelAppointmentPatient(CancelAppointmentDto dto);
     public void cancelAppointmentNutritionist(int appointmentId);
-    public List<PastBookedAppointmentsByNutritionistIdDto> getPastBookedAppointmentsByNutritionistId(int id);
+    public List<PastBookedAppointmentsByNutritionistIdDto> getPastBookedExaminationsByNutritionistId(int id);
     public List<AppointmentsByDateDto> getAppointmentsByDate(String date);
+    public void book(BookDto dto);
+    public AppointmentInfoDto getAppointmentInfo(int id);
+    public void notifyAppointmentIn2Days();
 }

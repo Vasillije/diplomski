@@ -1,9 +1,6 @@
 package com.sportscenter.nutritionist.controllers;
 
-import com.sportscenter.nutritionist.dto.complaint.AnswerComplaintDto;
-import com.sportscenter.nutritionist.dto.complaint.ComplaintAndAnswerDto;
-import com.sportscenter.nutritionist.dto.complaint.CreateComplaintDto;
-import com.sportscenter.nutritionist.dto.complaint.NutritionistComplaintsDto;
+import com.sportscenter.nutritionist.dto.complaint.*;
 import com.sportscenter.nutritionist.service.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,5 +39,15 @@ public class ComplaintController {
     @GetMapping("getComplaintsAndAnswers")
     public ResponseEntity<List<ComplaintAndAnswerDto>> getComplaintsAndAnswers(){
         return new ResponseEntity<>(complaintService.getComplaintsAndAnswers(), HttpStatus.OK);
+    }
+
+    @GetMapping("getAnsweredComplaintsByNutritionistId/{id}")
+    public ResponseEntity<List<AnsweredNutritionistComplaintsDto>> getAnsweredComplaintsByNutritionistId(@PathVariable int id){
+        return new ResponseEntity<>(complaintService.getAnsweredComplaintsByNutritionistId(id), HttpStatus.OK);
+    }
+
+    @GetMapping("getComplaintInfo/{id}")
+    public ResponseEntity<ComplaintInfoDto> getComplaintInfo(@PathVariable int id){
+        return new ResponseEntity<>(complaintService.getComplaintInfo(id), HttpStatus.OK);
     }
 }

@@ -1,69 +1,79 @@
 <div class="background">
     <div class="filter">
-        <form #filterForm="ngForm" (ngSubmit)="filterDate(filterForm.value)">
-            <mat-form-field class="picker">
-                <mat-label>Date from</mat-label>
-                <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFrom></mat-datepicker>
-            </mat-form-field>
+        <h1>CREATED APPOINTMENTS</h1>
+        
+        <div class="filter-forms-container">
+            <form #filterForm="ngForm" (ngSubmit)="filterDate(filterForm.value)" class="filter-form">
+                <div class="form-row">
+                    <mat-form-field class="picker">
+                        <mat-label>Date from</mat-label>
+                        <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom></mat-datepicker>
+                    </mat-form-field>
 
-            <mat-form-field class="picker">
-                <mat-label>Date to</mat-label>
-                <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
-                <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
-                <mat-datepicker #pickerTo></mat-datepicker>
-            </mat-form-field>
-            <button mat-button class="btn" id="filterBtn">FILTER</button>
-        </form>
-        <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)">
-        <mat-form-field class="inputName">
-            <mat-label>Patients's name</mat-label>
-            <input matInput type="text" name="username" ngModel>
-        </mat-form-field>
+                    <mat-form-field class="picker">
+                        <mat-label>Date to</mat-label>
+                        <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerTo></mat-datepicker>
+                    </mat-form-field>
                     <button mat-button class="btn" id="filterBtn">FILTER</button>
-        </form>
-        <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
-        <button mat-button class="btn" (click)="getOnlyControls()" >CONTROLS</button>
-        <button mat-button class="btn" (click)="getOnlyExaminations()" >EXAMINATIONS</button>
-        <button mat-button class="btn" (click)="getPastAppointments()" >PAST APPOINTMENTS</button>
-        <button mat-button class="btn" (click)="getFutureAppointments()" >FUTURE APPOINTMENTS</button>
-        <button mat-button class="btn" (click)="reset()" >RESET FILTERS</button>
+                </div>
+            </form>
+
+            <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)" class="filter-form">
+                <div class="form-row">
+                    <mat-form-field class="inputName">
+                        <mat-label>Patient's name</mat-label>
+                        <input matInput type="text" name="username" ngModel>
+                    </mat-form-field>
+                    <button mat-button class="btn" type="submit" id="filterBtn">FILTER</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="buttons-container">
+            <!-- <button mat-button class="btn" (click)="getOnlyConsultation()">CONSULTATIONS</button>
+            <button mat-button class="btn" (click)="getOnlyControls()">CONTROLS</button>
+            <button mat-button class="btn" (click)="getOnlyExaminations()">EXAMINATIONS</button> -->
+            <button mat-button class="btn" (click)="getPastAppointments()">PAST APPOINTMENTS</button>
+            <button mat-button class="btn" (click)="getFutureAppointments()">FUTURE APPOINTMENTS</button>
+        </div>
     </div>
+    
     <div class="center">
         <div class="table-container">
             <table mat-table [dataSource]="dataSource">
-        
                 <ng-container matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef> DATE </th>
-                    <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedDate}} </td>
                 </ng-container>
             
-                <ng-container matColumnDef="type">
+                <!-- <ng-container matColumnDef="type">
                     <th mat-header-cell *matHeaderCellDef> TYPE </th>
                     <td mat-cell *matCellDef="let element; let i = index"> {{appointmentType[i]}} </td>
-                </ng-container>
+                </ng-container> -->
 
                 <ng-container matColumnDef="duration">
-                    <th mat-header-cell *matHeaderCellDef> DURATION(MIN) </th>
-                    <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+                    <th mat-header-cell *matHeaderCellDef> DURATION</th>
+                    <td mat-cell *matCellDef="let element"> {{element.formattedDuration}} </td>
                 </ng-container>
             
                 <ng-container matColumnDef="patient">
                     <th mat-header-cell *matHeaderCellDef> PATIENT </th>
-                    <td mat-cell *matCellDef="let element; let i = index"> {{patientFullName[i]}} </td>
+                    <td mat-cell *matCellDef="let element; let i = index"> {{element.patientFullName}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="cancel">
                     <th mat-header-cell *matHeaderCellDef> CANCEL APPOINTMENT </th>
                     <td mat-cell *matCellDef="let element; let i = index"> 
                         <ng-container *ngIf="canCancelAppointment(element)">
-                            <button  mat-button color="warn" class="tablebtn" (click)="cancelAppointment(element)">CANCEL</button>
+                            <button mat-button color="warn" class="tablebtn" (click)="cancelAppointment(element)">CANCEL</button>
                         </ng-container>    
                     </td>
                 </ng-container>
 
-                
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>

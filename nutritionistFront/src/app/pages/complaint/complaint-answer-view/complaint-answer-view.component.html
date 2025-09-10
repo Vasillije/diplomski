@@ -1,12 +1,42 @@
 <div class="background">
-    <div class = "center">
+    <div class="center">
+        <div class="complaint-info">
+            <h2>Complaint Info</h2>
+            
+            <div class="info-row">
+                <span class="info-label">Patient : </span>
+                <span class="info-value">{{complaintDto?.patientFullName}}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Appointment Date : </span>
+                <span class="info-value">{{complaintDto?.appointmentDate | date:'dd.MM.yyyy - HH:mm'}}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Complaint Date : </span>
+                <span class="info-value">{{complaintDto?.complaintDate | date:'dd.MM.yyyy - HH:mm'}}</span>
+            </div>
+            
+            <div class="info-row">
+            <span class="info-label">Complaint Content : </span>
+            <span class="info-value content">{{complaintDto?.content}}</span>
+        </div>
+        </div>
+
         <div class="frm">
+            <h3>Answer to Complaint</h3>
             <form #complaintForm="ngForm" (ngSubmit)="answerComplaint(complaintForm.value)">
                 <mat-form-field class="inp">
-                    <mat-label>Answer</mat-label>
-                    <textarea matInput name="answer" ngModel></textarea>
-                  </mat-form-field>
-                <button mat-button class="btn">Submit</button>
+                    <mat-label>Your Answer</mat-label>
+                    <textarea matInput name="answer" ngModel placeholder="Type your response here..." required></textarea>
+                </mat-form-field>
+                
+                <div class="button-group">
+                    <button mat-button class="btnCancel" type="button" (click)="goBack()">Cancel</button>
+                    <button mat-button class="btnSubmit" type="submit">Submit</button>
+                </div>
             </form>
+        </div>
     </div>
 </div>

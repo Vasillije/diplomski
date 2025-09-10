@@ -10,6 +10,5 @@ public class AvailableAppointmentDto {
     private Date date;
     private int duration;
     private int nutritionistId;
-    private String nutritionistName;
-    private String nutritionistLastName;
+    private String nutritionistFullName;
 }
