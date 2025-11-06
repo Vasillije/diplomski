@@ -15,7 +15,71 @@ import { UserInfoDto } from '../interfaces/UserInfoDto';
 export class CreateMealPlanPatientViewComponent {
   constructor(private mealPlanService: MealPlanService,private loginService: LoginService,private route: ActivatedRoute,private router: Router) {}
 
+  defaultMealPlan: string = `-----MONDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: 
+
+  -----TUESDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: 
+
+  -----WEDNESDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: 
+
+  -----THURSDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: 
+
+  -----FRIDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: 
+
+  -----SATURDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: 
+
+  -----SUNDAY-----
+  Breakfast: 
+
+  Lunch: 
+
+  Snack: 
+
+  Dinner: `;
+
   appointmentId!: number;
+  patientId! : number;
 
   bmi: number = 0;
   physicalActivityText: string = '';
@@ -24,8 +88,6 @@ export class CreateMealPlanPatientViewComponent {
 
   userInfo: any;
   username : string = '';
-
-  
 
   ngOnInit(): void {
     this.appointmentId = +this.route.snapshot.paramMap.get('id')!;
@@ -42,6 +104,7 @@ export class CreateMealPlanPatientViewComponent {
           this.userInfo = data;
           console.log(this.userInfo);
           this.username = this.userInfo.username.toUpperCase();
+          this.patientId = this.userInfo.patientId;
           this.fillInfo();
         },
         (error) => alert('error')
@@ -117,4 +180,5 @@ export class CreateMealPlanPatientViewComponent {
   cancel(){
     this.router.navigate(['create-meal-plan-view']);
   }
+  
 }

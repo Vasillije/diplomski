@@ -1,0 +1,177 @@
+.background {
+    height: 100vh;
+    max-width: 100vw;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Dodato za bolju kontrolu */
+}
+
+.header-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    gap: 25px;
+}
+
+h1 {
+    text-align: center;
+    font-family: Georgia, serif !important;
+    color: #012a5b;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.filter-forms {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Dodato za centriranje */
+    gap: 15px;
+    width: 100%;
+}
+
+.filter-row {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Dodato za centriranje */
+    width: 100%;
+    margin-bottom: 20px; /* Umesto procenata za bolju kontrolu */
+}
+
+.divv {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrira sve unutar divv */
+}
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrira elemente unutar forme */
+    gap: 10px;
+    flex-wrap: wrap; /* Omogućava prelamanje na manjim ekranima */
+}
+
+.inputName {
+    width: 240px !important;
+    margin-bottom: 0; /* Ispravljeno da ukloni negativnu marginu */
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Dodato za centriranje */
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 0; /* Uklonjena negativna margin */
+}
+
+.btn {
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    min-width: 150px;
+    border-radius: 0%;
+}
+
+.date-btn {
+    margin-bottom: 0;
+}
+
+.center {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* Ostali stilovi za tabelu ostaju isti */
+table {
+    width: 100%;
+    background-color: rgb(247, 247, 245);
+}
+
+.mat-mdc-header-row {
+    background-color: #012a5b !important;
+    position: sticky;
+    z-index: 100;
+    top: 0;
+}
+
+.mat-mdc-header-cell {
+    color: rgb(247, 247, 245) !important;
+} 
+
+.mat-mdc-body {
+    border: none !important;
+} 
+
+.mat-mdc-cell {
+    border: none !important;
+}
+
+::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
+    background-color: rgb(211, 211, 211);
+}
+
+.tablebtn {
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    width: 70%;
+}
+
+@media (max-width: 768px) {
+    .filter-forms {
+        gap: 10px;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .filter-form {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        gap: 10px;
+    }
+    
+    .inputName {
+        width: 100% !important;
+    }
+    
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .center {
+        width: 95%;
+    }
+    
+    .header-container {
+        gap: 20px;
+    }
+}

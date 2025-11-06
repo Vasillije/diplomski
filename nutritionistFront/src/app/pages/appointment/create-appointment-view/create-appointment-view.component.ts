@@ -22,7 +22,8 @@ export class CreateAppointmentViewComponent {
   ];
   minDate: Date = new Date(new Date().setDate(new Date().getDate() + 1));
   dataSource : AppointmentsByDateDto[] = [];
-  displayedColumns: string[] = ['date', 'duration', 'patient'];
+  displayedColumns: string[] = ['date', 'duration', 'patient', "cancel"];
+  //displayedColumns: string[] = ['date', 'duration', 'patient'];
   appointmentType : string[] = [];
   patientFullName : string[] = [];
   date: Date | undefined;
@@ -114,6 +115,8 @@ export class CreateAppointmentViewComponent {
   getAppointmentsByDate(date: string) {
   this.appointmentService.getAppointmentsByDate(date).subscribe(
     (data) => {
+      this.patientFullName = [];
+      this.appointmentType = [];
       this.dataSource = data;
       
       this.dataSource = data.sort((a, b) => {
@@ -172,5 +175,37 @@ formatDuration(duration: number): string {
       window.location.reload();
       alert("Changes discarded successfully!");
     }
+  }
+
+  createDailyAppointments(result: any) {
+    console.log(result.appointmentDate);
+    if(!result.appointmentDate ){
+      alert("You must select a date to create daily appointments");
+      return;
+    }
+
+    this.appointmentService.createDailyAppointments(result.appointmentDate, this.loginService.getUserId()!).subscribe(
+      (data) => {
+        alert("Daily appointments created successfully");
+        const d = result.appointmentDate;
+        const date = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
+        this.getAppointmentsByDate(date);
+      },
+      (error) => 
+        alert("There was an error creating daily appointments")
+    );
+  }
+
+  cancelAppointment(element: any) {
+    this.appointmentService.cancelAppointmentNutritionist(element.appointmentId).subscribe(
+       (data) =>{
+         alert("Appointment canceled");
+         console.log(typeof(element.date));
+         var date = element.date.toISOString();
+         this.getAppointmentsByDate(date);
+       },
+       (error) =>
+         alert("Could not cancel appointment")
+     );
   }
 }

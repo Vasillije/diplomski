@@ -242,10 +242,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(user.getPenaltyPoints() >= 5){
             user.setBlocked(true);
         }
-
-
-
-
+        
         userRepository.save(user);
 
         String message = String.format(
@@ -483,4 +480,56 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
+    public void createDailyAppointments(String stringDate, int nutritionistId){
+        Date date = new Date(stringDate);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        Date endOfDay = cal.getTime();
+
+        cal.set(Calendar.HOUR_OF_DAY, 8);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date currentTime = cal.getTime();
+
+        List<Date> existingAppointments = appointmentRepository.getNutritionistAppointmentsTimeByDate(date, endOfDay, nutritionistId);
+
+        while (cal.get(Calendar.HOUR_OF_DAY) < 15 ||
+                (cal.get(Calendar.HOUR_OF_DAY) == 15 && cal.get(Calendar.MINUTE) <= 40)) {
+
+            boolean exists = false;
+            for (Date existing : existingAppointments) {
+                if (existing.getTime() == currentTime.getTime()) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
+                CreateAppointmentDto dto = new CreateAppointmentDto(currentTime, 20, nutritionistId);
+                createAppointment(dto);
+            }
+
+            cal.add(Calendar.MINUTE, 20);
+            currentTime = cal.getTime();
+        }
+    }
+
+    public List<NutritionistAppointmentDto> getAvailableAppointmentsByNutritionistId(int id){
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByNutritionistId(id);
+        List<NutritionistAppointmentDto> dtos = new ArrayList<>();
+
+        for(Appointment a : appointments){
+            if(a.isAvailable()) {
+                UserEntity user = userRepository.findById(a.getPatientId()).orElse(null);
+                NutritionistAppointmentDto dto = new NutritionistAppointmentDto(a.getId(), a.getDateAndTime(), a.getDuration(), "");
+                dtos.add(dto);
+            }
+        }
+        return dtos;
+    }
 }

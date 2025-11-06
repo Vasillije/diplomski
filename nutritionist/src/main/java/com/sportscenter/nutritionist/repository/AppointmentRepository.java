@@ -16,5 +16,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     List<Appointment> findAppointmentsByDateBooked(Date date);
     @Query("SELECT a FROM Appointment a WHERE a.dateAndTime BETWEEN :currentDate AND :twoDaysLater AND a.isAvailable = false")
     List<Appointment> findAppointmentsInNext2Days(@Param("currentDate") Date currentDate,@Param("twoDaysLater") Date twoDaysLater);
-
+    @Query("SELECT a.dateAndTime FROM Appointment a WHERE a.dateAndTime BETWEEN :startOfDay AND :endOfDay AND a.nutritionistId = :nutritionistId")
+    List<Date> getNutritionistAppointmentsTimeByDate(@Param("startOfDay") Date startOfDay, @Param("endOfDay") Date endOfDay, @Param("nutritionistId") int nutritionistId);
 }

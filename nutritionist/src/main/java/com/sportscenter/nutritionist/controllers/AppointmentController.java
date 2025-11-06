@@ -106,4 +106,16 @@ public class AppointmentController {
         appointmentService.notifyAppointmentIn2Days();
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("createDailyAppointments")
+    public ResponseEntity<Void> createDailyAppointments(@RequestParam String date, @RequestParam int nutritionistId){
+        appointmentService.createDailyAppointments(date, nutritionistId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("getAvailableAppointmentsByNutritionistId/{id}")
+    public ResponseEntity<List<NutritionistAppointmentDto>> getAvailableAppointmentsByNutritionistId(@PathVariable int id){
+        return new ResponseEntity<>(appointmentService.getAvailableAppointmentsByNutritionistId(id), HttpStatus.OK);
+    }
+
 }

@@ -14,6 +14,9 @@ import { UserHealthInfoComponent } from './user-health-info/user-health-info.com
   imports: [
     CommonModule,
     MaterialModule
+  ],
+  exports: [
+    UserHealthInfoComponent
   ]
 })
 export class UserProfileModule { }

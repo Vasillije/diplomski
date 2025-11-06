@@ -157,4 +157,19 @@ public class UserController {
     public ResponseEntity<UserInfoDto> getUserHealthInfoByAppointmentId(@PathVariable int id){
         return new ResponseEntity<>(userService.getUserInfoByAppointmentId(id), HttpStatus.OK);
     }
+
+    @GetMapping("getPatientsInfo/{id}")
+    public ResponseEntity<PatientInfoDto> getPatientsInfo(@PathVariable int id){
+        return new ResponseEntity<>(userService.getPatientsInfo(id), HttpStatus.OK);
+    }
+
+    @GetMapping("hasPreliminaryNutritionPlan/{id}")
+    public ResponseEntity<Boolean> hasPreliminaryNutritionPlan(@PathVariable int id){
+        return new ResponseEntity<>(userService.hasPreliminaryNutritionPlan(id), HttpStatus.OK);
+    }
+
+    @GetMapping("getPatientFullNames")
+    public ResponseEntity<List<PatientFullNameDto>> getPatientFullNames(){
+        return new ResponseEntity<>(userService.getPatientFullNames(), HttpStatus.OK);
+    }
 }

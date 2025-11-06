@@ -6,6 +6,7 @@ import com.sportscenter.nutritionist.models.*;
 import com.sportscenter.nutritionist.repository.*;
 import com.sportscenter.nutritionist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -225,6 +226,38 @@ public class UserServiceImpl implements UserService {
         dto.setUsername(patient.getUsername());
 
         return dto;
+    }
+
+    public PatientInfoDto getPatientsInfo(int id){
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        PatientInfoDto dto = new PatientInfoDto();
+
+        dto.setPatientId(user.getId());
+        dto.setGender(user.getGender());
+        dto.setPhysicalActivity(user.getPhysicalActivity());
+        dto.setWeight(user.getWeight());
+        dto.setHeight(user.getHeight());
+        dto.setAge(user.getAge());
+        dto.setGoal(user.getGoal());
+
+        return dto;
+    }
+
+    public boolean hasPreliminaryNutritionPlan(int id){
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return user.isHasPreliminaryPlan();
+    }
+
+    public List<PatientFullNameDto> getPatientFullNames(){
+        List<UserEntity> users = userRepository.findAllPatients();
+        List<PatientFullNameDto> dtos = new ArrayList<>();
+
+        for(UserEntity u : users){
+            String fullName = u.getName() + ' ' + u.getLastname();
+            PatientFullNameDto dto = new PatientFullNameDto(u.getId(), u.getName() + ' ' + u.getLastname());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 
 }

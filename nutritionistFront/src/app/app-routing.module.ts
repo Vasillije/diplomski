@@ -20,6 +20,9 @@ import { CreateMealPlanPatientViewComponent } from './pages/meal-plan/create-mea
 import { CreateAppointmentViewComponent } from './pages/appointment/create-appointment-view/create-appointment-view.component';
 import { AnsweredNutritionistComplaintsViewComponent } from './pages/complaint/answered-nutritionist-complaints-view/answered-nutritionist-complaints-view.component';
 import { UserHealthInfoComponent } from './pages/user-profile/user-health-info/user-health-info.component';
+import { BookAppointmentNutritionistViewComponent } from './pages/appointment/book-appointment-nutritionist-view/book-appointment-nutritionist-view.component';
+import { PreliminaryNutritionPlanViewComponent } from './pages/meal-plan/preliminary-nutrition-plan-view/preliminary-nutrition-plan-view.component';
+import { PreliminaryPlanGuard } from './guards/preliminary-plan.guard';
 
 const routes: Routes = [
   { path : 'login', component : LoginComponent },
@@ -29,6 +32,7 @@ const routes: Routes = [
   { path : 'nutritionist-appointment-view', component : NutritionistAppointmentViewComponent },
   { path : 'patient-appointment-view', component : PatientAppointmentViewComponent },
   { path : 'book-appointment-view', component : BookAppointmentViewComponent },
+  { path : 'book-appointment-nutritionist-view', component : BookAppointmentNutritionistViewComponent },
   { path : 'complaint-view/:id', component : ComplaintViewComponent },
   { path : 'nutritionist-complaints-view', component : NutritionistComplaintsViewComponent }, 
   { path : 'complaint-answer-view/:id', component : ComplaintAnswerViewComponent },
@@ -39,7 +43,9 @@ const routes: Routes = [
   { path : 'create-meal-plan-patient-view/:id', component : CreateMealPlanPatientViewComponent },
   { path : 'create-appointment-view', component : CreateAppointmentViewComponent },
   { path : 'answered-nutritionist-complaints-view', component : AnsweredNutritionistComplaintsViewComponent },
-  { path : 'user-health-info/:id', component : UserHealthInfoComponent }
+  { path : 'user-health-info/:id', component : UserHealthInfoComponent },
+  { path : 'preliminary-nutrition-plan-view', component : PreliminaryNutritionPlanViewComponent, canActivate: [PreliminaryPlanGuard] },
+
 ];
 
 @NgModule({

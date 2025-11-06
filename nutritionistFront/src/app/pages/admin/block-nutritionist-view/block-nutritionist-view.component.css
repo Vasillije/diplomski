@@ -20,13 +20,13 @@
   margin-top: 20px;
   width : 150px;
   background-color: rgb(13, 19, 54);
-  color: rgb(247, 247, 245);
+  color: rgb(247, 247, 245) !important;
 }
 
 .tablebtn{
   background-color: #012a5b !important;
   border-radius: 0%;
-  color: rgb(247, 247, 245);
+  color: rgb(247, 247, 245) !important;
   width: 70%;
 }
 

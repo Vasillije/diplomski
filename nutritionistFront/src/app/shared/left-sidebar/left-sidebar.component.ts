@@ -1,15 +1,18 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../pages/login/service/login.service';
 import { UserProfileService } from '../../pages/user-profile/services/user-profile.service';
 import { UserDto } from '../../pages/user-profile/interfaces/UserDto';
 import { MealPlanService } from '../../pages/meal-plan/service/meal-plan.service';
+import { SharedService } from '../service/shared.service';
+import { Subscription } from 'rxjs';
 
 interface MenuItem {
   routeLink: string;
   icon: string;
   label: string;
   action?: () => void;
+  showCondition?: boolean;
 }
 
 @Component({
@@ -20,10 +23,43 @@ interface MenuItem {
   styleUrl: './left-sidebar.component.css'
 })
 export class LeftSidebarComponent {
-  constructor(private loginService : LoginService, private userProfileService : UserProfileService, private mealPlanService : MealPlanService){}
+  constructor(private loginService : LoginService, private userProfileService : UserProfileService, private mealPlanService : MealPlanService,
+    private cdr: ChangeDetectorRef, private sharedService : SharedService
+  ){}
 
   isLeftSidebarCollapsed = input.required<boolean>();
   changeIsLeftSidebarCollapsed = output<boolean>();
+  private subscription: Subscription | undefined;
+
+  hasPreliminaryPlan : boolean = false;
+
+  ngOnInit(){
+    //this.hasPreliminaryNutritionPlan();
+    this.subscription = this.sharedService.hasPreliminaryPlan$.subscribe(
+      (newValue) => {
+        this.hasPreliminaryPlan = newValue;
+      }
+    );
+  }
+
+  hasPreliminaryNutritionPlan(){
+    this.userProfileService.hasPreliminaryNutritionPlan(this.loginService.getUserId()!).subscribe(
+      (data) =>{
+        this.hasPreliminaryPlan = data;
+        this.cdr.detectChanges(); // Osveži view
+      },
+      (error) => {
+        console.error("Error checking preliminary plan:", error);
+        this.hasPreliminaryPlan = false;
+        this.cdr.detectChanges(); // Osveži view
+      }
+    );
+  }
+
+  get preliminaryPlanRoute(): string {
+    return `preliminary-nutrition-plan-view/${this.loginService.getUserId()}`;
+}
+
 
   itemsAdmin: MenuItem[] = [
     {
@@ -94,11 +130,10 @@ export class LeftSidebarComponent {
       icon: 'fas fa-user',
       label: 'Profile'
     },
-    {
-      routeLink : '',
+    { // jos treba da izmenis da na klik dugmeta kreira preliminary nutrition plan i da updatuje healt info 
+      routeLink : `preliminary-nutrition-plan-view`,///${this.loginService.getUserId()}
       icon: 'fas fa-burger',
-      label: 'Preliminary nutrition plan',
-      action: () => this.makePreliminaryNutritionPlan()
+      label: 'Preliminary nutrition plan'
     },
     {
       routeLink: '',
@@ -127,61 +162,64 @@ export class LeftSidebarComponent {
   ];
 
   getItemsBasedOnRole() {
-  const role = this.loginService.getRole();
-  
-  // Ako je role niz, uzmite prvi element
-  const roleValue = Array.isArray(role) ? role[0] : role;
-  
-  switch(roleValue) {
-    case 'ADMIN':
-      return this.itemsAdmin;
-    case 'NUTRITIONIST':
-      return this.itemsNutritionist;
-    case 'PATIENT':
-      return this.itemsPatient;
-    default:
-      return this.itemsLoggedOut;
+    const role = this.loginService.getRole();
+    const roleValue = Array.isArray(role) ? role[0] : role;
+    
+    switch(roleValue) {
+      case 'ADMIN':
+        return this.itemsAdmin;
+      case 'NUTRITIONIST':
+        return this.itemsNutritionist;
+      case 'PATIENT':
+        return this.getFilteredPatientItems(); // Koristi filtriranu listu
+      default:
+        return this.itemsLoggedOut;
+    }
   }
-}
 
-makePreliminaryNutritionPlan(){
-    var userDto : UserDto = {
-          username: '',
-          password: '',
-          name: '',
-          lastName: '',
-          gender: 2,
-          physicalActivity: 4,
-          weight: 0,
-          height: 0,
-          age: 0,
-          goal: 3,
-          diseases: false,
-          email: '',
-          phoneNumber: '',
-          address: ''
-        };
+  getFilteredPatientItems(): MenuItem[] {
+    // Vrati sve iteme osim "Preliminary nutrition plan" ako hasPreliminaryPlan je true
+    return this.itemsPatient.filter(item => {
+      if (item.label === 'Preliminary nutrition plan' && this.hasPreliminaryPlan) {
+        return false; // Sakrij ovaj item
+      }
+      return true; // Prikaži sve ostale iteme
+    });
+  }
 
+  makePreliminaryNutritionPlan(){
+    const userConfirmation = confirm("NOTE: You can get preliminary nutrition plan only once. Are you sure you want to proceed?");
+    
+    if (!userConfirmation) {
+      return;
+    }
+    
     this.userProfileService.getUserInfo(this.loginService.getUserId()!).subscribe(
       (data) => {
-        userDto = data;
-        if(userDto.username == '' || userDto.password == '' || userDto.name == '' || userDto.lastName == '' || userDto.gender == 2
-          || userDto.physicalActivity == 4 || userDto.weight == 0 || userDto.height == 0 || userDto.age ==0 || userDto.goal == 3
-          || userDto.email == '' || userDto.phoneNumber == '' || userDto.address == ''){
+        const userDto = data;
+        if(userDto.username == '' || userDto.password == '' || userDto.name == '' || 
+          userDto.lastName == '' || userDto.gender == 2 || userDto.physicalActivity == 4 || 
+          userDto.weight == 0 || userDto.height == 0 || userDto.age == 0 || userDto.goal == 3 ||
+          userDto.email == '' || userDto.phoneNumber == '' || userDto.address == ''){
           alert("Incomplete user data. Go to user profile and fill in all fields");
           return;
         } else {
           this.mealPlanService.generateMealPlan(this.loginService.getUserId()!).subscribe(
-          (data) => {
-            alert("Meal plan created")
-          },
-          (error) =>
-            alert("Could not create meal plan")
+            (data) => {
+              alert("Meal plan created");
+              // Postavi flag i osveži prikaz
+              this.hasPreliminaryPlan = true;
+              this.cdr.detectChanges(); // Osveži view da bi sakrio dugme
+            },
+            (error) => {
+              alert("Could not create meal plan");
+            }
           );
         }
       },
-      (error) =>
-        alert("An error occured")
+      (error) => {
+        alert("An error occurred");
+      }
     );
   }
 

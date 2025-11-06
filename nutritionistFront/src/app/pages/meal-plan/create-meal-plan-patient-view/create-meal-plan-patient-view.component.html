@@ -26,7 +26,7 @@
             <form #mealPlanForm="ngForm" (ngSubmit)="createMealPlan(mealPlanForm.value.content)">
                 <mat-form-field class="inp">
                     <mat-label>Type your meal plan</mat-label>
-                    <textarea matInput name="content" ngModel></textarea>
+                    <textarea matInput name="content" [(ngModel)]="defaultMealPlan">></textarea>
                 </mat-form-field>
                 <button mat-button class="btn" type="button" (click)="cancel()">Cancel</button>
                 <button mat-button class="btn" type="submit" id="submitBtn">Submit</button>

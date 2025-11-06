@@ -33,8 +33,10 @@
             </div>
 
             <div class="form-row">
-                <button mat-button class="btn-down" type="submit">Create</button>
-                <button mat-button class="btn-down" type="button" (click)="discard(createAppointmentForm.value)">Discard</button>
+                <button *ngIf="dataSource.length !== 24" mat-button class="btn-down" type="submit">Create</button>
+                <!-- <button *ngIf="dataSource && dataSource.length == 0" mat-button class="btn-down" type="button" (click)="createDailyAppointments(createAppointmentForm.value)">Create daily appointmens</button> -->
+                <button *ngIf="dataSource.length !== 24" mat-button class="btn-down" type="button" (click)="createDailyAppointments(createAppointmentForm.value)">Create daily appointmens</button>
+                <!-- <button mat-button class="btn-down" type="button" (click)="discard(createAppointmentForm.value)">Cancel</button> -->
             </div>
 
         </form>
@@ -53,6 +55,13 @@
         <ng-container matColumnDef="patient">
             <th mat-header-cell *matHeaderCellDef> PATIENT </th>
             <td mat-cell *matCellDef="let element; let i = index"> {{patientFullName[i]}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cancel">
+            <th mat-header-cell *matHeaderCellDef> CANCEL APPOINTMENT </th>
+            <td mat-cell *matCellDef="let element; let i = index"> 
+                <button mat-button class="btn1" (click)="cancelAppointment(element)">CANCEL</button>
+            </td>
         </ng-container>
 
         

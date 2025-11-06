@@ -47,11 +47,20 @@ h1{
     margin-bottom: 15px;
 }
 
+.btn1{
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    margin-left: 15px;
+    margin-bottom: 0px;
+    width: 70%;
+}
+
 .btn-down{
     background-color: #012a5b !important;
     color: rgb(247, 247, 245) !important;
     border-radius: 0%;
-    margin-left: 70px;
+    margin-left: 12%;
     margin-bottom: 15px;
     width: 200px;
 }

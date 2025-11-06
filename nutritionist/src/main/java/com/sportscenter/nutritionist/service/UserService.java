@@ -21,4 +21,7 @@ public interface UserService {
     public void unblockUser(int id);
     public UserDto getUserInfo(int id);
     public UserInfoDto getUserInfoByAppointmentId(int id);
+    public PatientInfoDto getPatientsInfo(int id);
+    public boolean hasPreliminaryNutritionPlan(int id);
+    public List<PatientFullNameDto> getPatientFullNames();
 }

@@ -141,7 +141,7 @@ export class CreateMealPlanViewComponent {
     this.sortByDate();
   }
 
-  usersHealthInfo(id : number){
+  usersHealthInfo(id: number) {
     console.log(id);
     this.router.navigate(["user-health-info", id]);
   }

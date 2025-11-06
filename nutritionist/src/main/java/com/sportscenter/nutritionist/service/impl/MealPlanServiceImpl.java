@@ -78,6 +78,8 @@ public class MealPlanServiceImpl implements MealPlanService {
     @Override
     public void generateMealPlan(int userId) throws MessagingException, IOException {
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setHasPreliminaryPlan(true);
+        userRepository.save(user);
 
         List<UserNutritionPlan> userNutritionPlans = userNutritionPlanRepository.findUserNutritionPlanByUser(user);
 

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CreateAppointmentDto } from '../interfaces/CreateAppointmentDto';
 import { PatientAppointmentDto } from '../interfaces/PatientAppointmentDto';
@@ -7,6 +7,8 @@ import { NutritionistAppointmentDto } from '../interfaces/NutritionistAppointmen
 import { AppointmentsByDateDto } from '../interfaces/AppointmentsByDateDto';
 import { BookDto } from '../interfaces/BookDto';
 import { CancelAppointmentDto } from '../interfaces/CancelAppointmentDto';
+import { Observable } from 'rxjs';
+import { PatientFullNameDto } from '../interfaces/PatientFullNameDto';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +55,25 @@ export class AppointmentService {
   
   getAppointmentsByDate(date : string){
     return this.http.get<AppointmentsByDateDto[]>("api/appointment/getAppointmentsByDate/"+date)
+  }
+
+  createDailyAppointments(date : string, nutritionistId : number): Observable<any>{
+    const params = new HttpParams()
+    .set('date', date)
+    .set('nutritionistId', nutritionistId)
+    
+  return this.http.post('/api/appointment/createDailyAppointments', null, { params });
+  }
+
+  createAppointmentNutritionist(dto : CreateAppointmentDto){
+    return this.http.post<void>("/api/appointment/createAppointmentNutritionist", dto);
+  }
+
+  getAvailableAppointmentsByNutritionistId(id : number){
+    return this.http.get<NutritionistAppointmentDto[]>("/api/appointment/getAvailableAppointmentsByNutritionistId/"+id);
+  }
+
+  getPatientFullNames(){
+    return this.http.get<PatientFullNameDto[]>('/api/users/getPatientFullNames');
   }
 }

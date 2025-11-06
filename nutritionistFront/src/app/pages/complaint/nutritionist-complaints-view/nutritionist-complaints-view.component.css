@@ -99,7 +99,7 @@
   justify-content: center; /* DODATO */
   align-items: center; /* DODATO */
   gap: 15px; /* DODATO */
-  margin-bottom: 15px; /* DODATO */
+  margin-bottom: 0px; /* DODATO */
 }
 
 .inputName{

@@ -3,6 +3,9 @@ import { UserProfileDto } from '../interfaces/UserProfileDto';
 import { UserProfileService } from '../services/user-profile.service';
 import { LoginService } from '../../login/service/login.service';
 import { HealthInfoDto } from '../interfaces/HealthInfoDto';
+import { ActivatedRoute } from '@angular/router';
+import { PatientAppointmentDto } from '../../appointment/interfaces/PatientAppointmentDto';
+import { PatientInfoDto } from '../interfaces/PatientInfoDto';
 
 @Component({
   selector: 'app-user-health-info',
@@ -13,10 +16,11 @@ import { HealthInfoDto } from '../interfaces/HealthInfoDto';
 })
 export class UserHealthInfoComponent {
 
-  constructor(private userProfileService : UserProfileService, private loginService : LoginService){}
+  constructor(private userProfileService : UserProfileService, private loginService : LoginService, private route : ActivatedRoute){}
 
-  user! : UserProfileDto;
+  user! : PatientInfoDto;
   username : string = '';
+  patientId! : number;
 
   genderOptions = [
     { value: 'MALE', viewValue: 'Male' },
@@ -40,14 +44,16 @@ export class UserHealthInfoComponent {
   ];
 
   ngOnInit(){
-   this.loadUserInfo();
+    this.patientId = +this.route.snapshot.paramMap.get('id')!;
+    this.loadUserInfo();
   }
 
   loadUserInfo(){
-    this.userProfileService.getUserByUsername(this.loginService.getUsername()!).subscribe(
+    this.userProfileService.getPatientsInfo(this.patientId).subscribe(
       (data) => {
         this.user = data;
-        this.username = data.username;
+        this.patientId = this.user.patientId;
+        console.log(data);
       },
       (error) =>
         alert(error.message)
@@ -109,7 +115,7 @@ export class UserHealthInfoComponent {
       }
   
       const dto : HealthInfoDto = {
-        id : this.loginService.getUserId()!,
+        id : this.patientId,
         gender: gender,
         physicalActivity: physicalActivity,
         weight: result.weight,

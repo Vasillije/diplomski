@@ -18,4 +18,6 @@ public interface AppointmentService {
     public void book(BookDto dto);
     public AppointmentInfoDto getAppointmentInfo(int id);
     public void notifyAppointmentIn2Days();
+    public void createDailyAppointments(String date, int nutritionistId);
+    public List<NutritionistAppointmentDto> getAvailableAppointmentsByNutritionistId(int id);
 }

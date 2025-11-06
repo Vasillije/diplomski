@@ -5,6 +5,7 @@ import { GeneralInfoDto } from '../interfaces/GeneralInfoDto';
 import { HealthInfoDto } from '../interfaces/HealthInfoDto';
 import { ContactInfoDto } from '../interfaces/ContactInfoDto';
 import { UserDto } from '../interfaces/UserDto';
+import { PatientInfoDto } from '../interfaces/PatientInfoDto';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,14 @@ export class UserProfileService {
 
   getUserInfo(id : number){
     return this.http.get<UserDto>('/api/users/getUserInfo/' + id);
+  }
+
+  getPatientsInfo(id : number){
+    return this.http.get<PatientInfoDto>('/api/users/getPatientsInfo/' + id);
+  }
+
+  hasPreliminaryNutritionPlan(id : number){
+    return this.http.get<boolean>('/api/users/hasPreliminaryNutritionPlan/'+id);
   }
 
 }

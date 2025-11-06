@@ -46,6 +46,8 @@ public class UserEntity {
     private boolean hasLogged = false;
     @Column(nullable = true)
     private boolean isBlocked = false;
+    @Column(nullable = true)
+    private boolean hasPreliminaryPlan = false;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

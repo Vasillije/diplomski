@@ -6,6 +6,7 @@ import { NutritionistAppointmentViewComponent } from './nutritionist-appointment
 import { PatientAppointmentViewComponent } from './patient-appointment-view/patient-appointment-view.component';
 import { BookAppointmentViewComponent } from './book-appointment-view/book-appointment-view.component';
 import { CreateAppointmentViewComponent } from './create-appointment-view/create-appointment-view.component';
+import { BookAppointmentNutritionistViewComponent } from './book-appointment-nutritionist-view/book-appointment-nutritionist-view.component';
 
 
 
@@ -15,7 +16,8 @@ import { CreateAppointmentViewComponent } from './create-appointment-view/create
     NutritionistAppointmentViewComponent,
     PatientAppointmentViewComponent,
     BookAppointmentViewComponent,
-    CreateAppointmentViewComponent
+    CreateAppointmentViewComponent,
+    BookAppointmentNutritionistViewComponent
   ],
   imports: [
     CommonModule,

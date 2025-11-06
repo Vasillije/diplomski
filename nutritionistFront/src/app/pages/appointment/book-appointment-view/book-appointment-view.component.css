@@ -39,7 +39,7 @@ h1 {
     justify-content: center;
     align-items: center; /* Dodato za centriranje */
     width: 100%;
-    margin-bottom: 20px; /* Umesto procenata za bolju kontrolu */
+    margin-bottom: -20px; /* Umesto procenata za bolju kontrolu */
 }
 
 .divv {
@@ -91,7 +91,7 @@ h1 {
 }
 
 .table-container {
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
     width: 100%;
     border: 1px solid #e0e0e0;
