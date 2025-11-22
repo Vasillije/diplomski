@@ -6,6 +6,7 @@ import { CreateMealPlanViewComponent } from './create-meal-plan-view/create-meal
 import { CreateMealPlanPatientViewComponent } from './create-meal-plan-patient-view/create-meal-plan-patient-view.component';
 import { UserProfileModule } from '../user-profile/user-profile.module';
 import { PreliminaryNutritionPlanViewComponent } from './preliminary-nutrition-plan-view/preliminary-nutrition-plan-view.component';
+import { CreatedMealPlanViewComponent } from './created-meal-plan-view/created-meal-plan-view.component';
 
 
 
@@ -14,7 +15,8 @@ import { PreliminaryNutritionPlanViewComponent } from './preliminary-nutrition-p
     NutritionistMealPlanViewComponent,
     CreateMealPlanViewComponent,
     CreateMealPlanPatientViewComponent,
-    PreliminaryNutritionPlanViewComponent
+    PreliminaryNutritionPlanViewComponent,
+    CreatedMealPlanViewComponent
   ],
   imports: [
     CommonModule,

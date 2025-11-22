@@ -10,4 +10,5 @@ public class UnblockUserDto {
     private String lastName;
     private String email;
     private int penaltyPoints;
+    private boolean blocked;
 }

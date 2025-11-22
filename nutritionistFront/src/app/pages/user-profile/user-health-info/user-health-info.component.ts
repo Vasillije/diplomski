@@ -3,7 +3,7 @@ import { UserProfileDto } from '../interfaces/UserProfileDto';
 import { UserProfileService } from '../services/user-profile.service';
 import { LoginService } from '../../login/service/login.service';
 import { HealthInfoDto } from '../interfaces/HealthInfoDto';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PatientAppointmentDto } from '../../appointment/interfaces/PatientAppointmentDto';
 import { PatientInfoDto } from '../interfaces/PatientInfoDto';
 
@@ -16,7 +16,9 @@ import { PatientInfoDto } from '../interfaces/PatientInfoDto';
 })
 export class UserHealthInfoComponent {
 
-  constructor(private userProfileService : UserProfileService, private loginService : LoginService, private route : ActivatedRoute){}
+  constructor(private userProfileService : UserProfileService, private loginService : LoginService, private route : ActivatedRoute
+    , private router : Router
+  ){}
 
   user! : PatientInfoDto;
   username : string = '';
@@ -149,6 +151,10 @@ export class UserHealthInfoComponent {
       (error) =>
         alert(error.message)
       );
+    }
+
+    cancel(){
+      this.router.navigate(['/create-meal-plan-view']);
     }
 
 }

@@ -242,7 +242,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(user.getPenaltyPoints() >= 5){
             user.setBlocked(true);
         }
-        
+
         userRepository.save(user);
 
         String message = String.format(

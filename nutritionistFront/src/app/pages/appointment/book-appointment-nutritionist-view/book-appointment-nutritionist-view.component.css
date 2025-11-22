@@ -40,6 +40,7 @@ h1 {
     align-items: center; /* Dodato za centriranje */
     width: 100%;
     margin-bottom: 20px; /* Umesto procenata za bolju kontrolu */
+    margin-bottom: -20px;
 }
 
 .divv {

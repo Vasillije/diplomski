@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { PastBookedAppointmentsByNutritionistIdDto } from '../interfaces/PastBookedAppointmentsByNutritionistIdDto';
 import { NutritionistMealPlanDto } from '../interfaces/NutritionistMealPlanDto';
 import { UserInfoDto } from '../interfaces/UserInfoDto';
+import { CreatedMealPlanDto } from '../interfaces/CreatedMealPlanDto';
 
 @Injectable({
   providedIn: 'root'
@@ -27,5 +28,9 @@ export class MealPlanService {
 
   getUserInfoByAppointmentId(appointmentId : number){
     return this.http.get<UserInfoDto>('/api/users/getUserInfoByAppointmentId/'+appointmentId);
+  }
+
+  getCreatedNutritionistsMealPlans(id : number){
+    return this.http.get<CreatedMealPlanDto[]>('/api/mealPlan/getCreatedNutritionistsMealPlans/'+id);
   }
 }

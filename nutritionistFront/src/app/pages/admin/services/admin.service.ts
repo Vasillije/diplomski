@@ -30,4 +30,8 @@ export class AdminService {
   unblockUser(id : number){
     return this.http.post<void>('api/users//unblockUser', id);
   }
+
+  getAllUsers(){
+    return this.http.get<UnblockUsersDto[]>('api/users/getAllUsers');
+  }
 }

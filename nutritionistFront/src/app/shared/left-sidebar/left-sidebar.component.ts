@@ -65,17 +65,12 @@ export class LeftSidebarComponent {
     {
       routeLink : 'unblock-user-view',
       icon: 'fas fa-unlock',
-      label: 'Unblock users'
+      label: '(Un)block users'
     },
     {
       routeLink : 'admin-complaint-and-answer-view',
       icon: 'fas fa-circle-exclamation',
       label: 'Complaints and answers'
-    },
-    {
-      routeLink : 'block-nutritionist-view',
-      icon: 'fas fa-ban',
-      label: 'Block nutritionist'
     },
     {
       routeLink: '',
@@ -92,6 +87,11 @@ export class LeftSidebarComponent {
       label: 'Meal plan'
     },
     {
+      routeLink : 'created-meal-plan-view',
+      icon: 'fas fa-check',
+      label: 'Created meal plans'
+    },
+    {
       routeLink : 'nutritionist-complaints-view',
       icon: 'fas fa-message',
       label: 'Complaints'
@@ -100,6 +100,11 @@ export class LeftSidebarComponent {
       routeLink : 'nutritionist-appointment-view',
       icon: 'fas fa-calendar-check',
       label: 'Created appointments'
+    },
+    {
+      routeLink : 'book-appointment-nutritionist-view',
+      icon: 'fas fa-circle-plus',
+      label: 'Book appointment'
     },
     {
       routeLink : 'create-appointment-view',

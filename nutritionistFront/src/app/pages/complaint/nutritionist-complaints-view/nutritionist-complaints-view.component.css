@@ -1,129 +1,159 @@
 .background{
     height: 100vh;
     width: 100%;
+    overflow: auto;
 }
 
-.tablebtn{
-    background-color: rgb(13, 19, 54);
-    color: rgb(247, 247, 245);
-    width: 70%;
-    margin-left: 15%;
-  }
-
-  .center{
-    position: absolute; 
+.filter {
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 2%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.filter-forms-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+}
+
+.form-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 0px;
+    flex-wrap: wrap;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     border-radius: 15px;
     align-items: center;
-    width: 80%;
-    margin-left: 5%;
-  }
+    width: 90%;
+    margin: 0 auto;
+}
   
-  .tablebtn{
+.tablebtn{
     background-color: #012a5b !important;
     color: rgb(247, 247, 245) !important;
     border-radius: 0%;
     width: 70%;
     margin-left: -16px;
-  }
+}
 
 .btn{
-  background-color: #012a5b !important;
-  color: rgb(247, 247, 245) !important;
-  border-radius: 0%;
-  margin-left: 5px;
-  margin-bottom: 15px;
+    background-color: #012a5b !important;
+    color: rgb(247, 247, 245) !important;
+    border-radius: 0%;
+    margin: 5px;
+    min-width: 200px;
 }
   
 .mat-mdc-header-row {
-  background-color: #012a5b !important;
-  margin-left: 10px !important;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+    background-color: #012a5b !important;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#filterBtn{
+  margin-bottom: 25px;
 }
   
 .mat-mdc-header-cell {
-  color: rgb(247, 247, 245) !important;
+    color: rgb(247, 247, 245) !important;
+    font-weight: bold;
 } 
   
-.mat-mdc-body {
-  border: none !important;
+.mat-mdc-table {
+    border: none !important;
 } 
-  
   
 .mat-mdc-cell {
-  border: none !important;
+    border: none !important;
+    padding: 8px !important;
 }
   
 ::ng-deep .mat-mdc-table tbody tr:nth-child(even) {
-  background-color: rgb(211, 211, 211);
+    background-color: rgb(211, 211, 211);
 }
 
 .picker{
-  margin-left: 20px;
-  width: 245px;
-}
-
-.filter {
-  padding: 20px;
-  border-radius: 15px;
-  align-items: center;
-  width: 80%;
-  margin-left: 5%;
-  padding-top: 2%;
-  display: flex; /* DODATO */
-  flex-direction: column; /* DODATO */
-  align-items: center; /* DODATO */
-  text-align: center; /* DODATO */
-}
-
-.filter-forms-container {
-  display: flex; /* DODATO */
-  flex-direction: column; /* DODATO */
-  align-items: center; /* DODATO */
-  width: 100%; /* DODATO */
-  gap: 15px; /* DODATO */
-}
-
-.filter-form {
-  display: flex; /* DODATO */
-  justify-content: center; /* DODATO */
-  width: 100%; /* DODATO */
-}
-
-.form-row {
-  display: flex; /* DODATO */
-  justify-content: center; /* DODATO */
-  align-items: center; /* DODATO */
-  gap: 15px; /* DODATO */
-  margin-bottom: 0px; /* DODATO */
+    width: 245px;
 }
 
 .inputName{
-  width: 240px;
-  margin-left: 20px;
+    width: 240px;
 }
 
 .table-container {
-  max-height: 300px;
-  overflow-y: auto;
-  width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #ddd;
 }
 
 .wrap-content {
-  max-width: 200px; /* koliko god želiš */
-  word-wrap: break-word;
-  white-space: normal;
+    max-width: 200px;
+    word-wrap: break-word;
+    white-space: normal;
+    line-height: 1.4;
 }
 
 h1{
-  font-family: Georgia, serif !important;
+    font-family: Georgia, serif !important;
     color: #012a5b;
-    margin-top: -100px;
-    padding-top: 150px;
+    margin-top: 0;
+    padding-top: 20px;
     text-align: center;
     font-size: 30px;
+    margin-bottom: 30px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .picker, .inputName {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .btn {
+        min-width: 150px;
+        font-size: 12px;
+    }
+    
+    .filter {
+        width: 95%;
+        padding: 10px;
+    }
+    
+    .center {
+        width: 95%;
+        padding: 10px;
+    }
 }

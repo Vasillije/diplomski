@@ -3,60 +3,27 @@
         <h1>COMPLAINTS</h1>
         
         <div class="filter-forms-container">
-            <form #filterAppointmentForm="ngForm" (ngSubmit)="filterDate(filterAppointmentForm.value)" class="filter-form">
+            <form #filterDateForm="ngForm" class="filter-form">
                 <div class="form-row">
                     <mat-form-field class="picker">
-                        <mat-label>Appointment date from</mat-label>
+                        <mat-label>Date from</mat-label>
                         <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
                         <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
                         <mat-datepicker #pickerFrom></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field class="picker">
-                        <mat-label>Appointment date to</mat-label>
+                        <mat-label>Date to</mat-label>
                         <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
                         <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
                         <mat-datepicker #pickerTo></mat-datepicker>
                     </mat-form-field>
-                    <button mat-button class="btn" id="filterBtn">FILTER</button>
                 </div>
-            </form>
 
-            <form #filterComplaintForm="ngForm" (ngSubmit)="filterDateComplaint(filterComplaintForm.value)">
                 <div class="form-row">
-                    <mat-form-field class="picker">
-                        <mat-label>Complaint date from</mat-label>
-                        <input matInput [matDatepicker]="pickerFromComplaint" name="dateFrom" ngModel>
-                        <mat-datepicker-toggle matIconSuffix [for]="pickerFromComplaint"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerFromComplaint></mat-datepicker>
-                    </mat-form-field>
-
-                    <mat-form-field class="picker">
-                        <mat-label>Complaint date to</mat-label>
-                        <input matInput [matDatepicker]="pickerToComplaint" name="dateTo" ngModel>
-                        <mat-datepicker-toggle matIconSuffix [for]="pickerToComplaint"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerToComplaint></mat-datepicker>
-                    </mat-form-field>
-                    <button mat-button class="btn" id="filterBtn">FILTER</button>
-                </div>
-            </form>
-
-             <form #filterAnswerForm="ngForm" *ngIf="showAnsweredComplaints" (ngSubmit)="filterDateAnswer(filterAnswerForm.value)">
-                <div class="form-row">
-                    <mat-form-field class="picker">
-                    <mat-label>Answer date from</mat-label>
-                    <input matInput [matDatepicker]="pickerFromAnswer" name="dateFrom" ngModel>
-                    <mat-datepicker-toggle matIconSuffix [for]="pickerFromAnswer"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerFromAnswer></mat-datepicker>
-                    </mat-form-field>
-
-                    <mat-form-field class="picker">
-                    <mat-label>Answer date to</mat-label>
-                    <input matInput [matDatepicker]="pickerToAnswer" name="dateTo" ngModel>
-                    <mat-datepicker-toggle matIconSuffix [for]="pickerToAnswer"></mat-datepicker-toggle>
-                    <mat-datepicker #pickerToAnswer></mat-datepicker>
-                    </mat-form-field>
-                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+                    <button type="button" mat-button class="btn" (click)="filterDate(filterDateForm.value)">FILTER BY APPOINTMENT DATE</button>
+                    <button type="button" mat-button class="btn" (click)="filterDateComplaint(filterDateForm.value)">FILTER BY COMPLAINT DATE</button>
+                    <button type="button" mat-button class="btn" *ngIf="showAnsweredComplaints" (click)="filterDateAnswer(filterDateForm.value)">FILTER BY ANSWER DATE</button>
                 </div>
             </form>
 
@@ -139,7 +106,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="answerContent">
-                    <th mat-header-cell *matHeaderCellDef> COMPLAINT CONTENT </th>
+                    <th mat-header-cell *matHeaderCellDef> ANSWER CONTENT </th>
                     <td mat-cell *matCellDef="let element" class="wrap-content"> {{element.answerContent}} </td>
                 </ng-container>
 
@@ -155,4 +122,3 @@
         </div>
     </div>
 </div>
-

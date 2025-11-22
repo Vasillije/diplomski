@@ -68,7 +68,7 @@ public class UserController {
         user.setPhysicalActivity(PhysicalActivity.EMPTY);
         user.setBlocked(false);
 
-        Role roles = roleRepository.findByName("NUTRITIONIST").get();
+        Role roles = roleRepository.findByName("PATIENT").get();
         user.setRoles(Collections.singletonList(roles));
 
         userRepository.save(user);
@@ -171,5 +171,10 @@ public class UserController {
     @GetMapping("getPatientFullNames")
     public ResponseEntity<List<PatientFullNameDto>> getPatientFullNames(){
         return new ResponseEntity<>(userService.getPatientFullNames(), HttpStatus.OK);
+    }
+
+    @GetMapping("getAllUsers")
+    public ResponseEntity<List<UnblockUserDto>> getAllUsers(){
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 }

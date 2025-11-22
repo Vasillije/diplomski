@@ -1,0 +1,81 @@
+<div class="background">
+    <h1>CREATED MEAL PLANS</h1>
+    
+    <div class="filter-container">
+        <div class="filter">
+            <form #filterForm="ngForm" (ngSubmit)="filterDate(filterForm.value)" class="filter-form">
+                <div class="form-row">
+                    <mat-form-field class="picker">
+                        <mat-label>Date from</mat-label>
+                        <input matInput [matDatepicker]="pickerFrom" name="dateFrom" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field class="picker">
+                        <mat-label>Date to</mat-label>
+                        <input matInput [matDatepicker]="pickerTo" name="dateTo" ngModel>
+                        <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerTo></mat-datepicker>
+                    </mat-form-field>
+                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+                </div>
+            </form>
+
+            <form #filterNameForm="ngForm" (ngSubmit)="filterByName(filterNameForm.value)" class="filter-form">
+                <div class="form-row">
+                    <mat-form-field class="inputName">
+                        <mat-label>Patient's name</mat-label>
+                        <input matInput type="text" name="username" ngModel>
+                    </mat-form-field>
+                    <button mat-button class="btn" id="filterBtn">FILTER</button>
+                </div>
+            </form>
+            <div class="form-row">
+                <button mat-button class="btn reset-btn" (click)="reset()">RESET FILTERS</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="center">
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="patientsFullName">
+                    <th mat-header-cell *matHeaderCellDef> PATIENT NAME </th>
+                    <td mat-cell *matCellDef="let element"> {{element.patientFullName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> DATE </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateCreated | date:'dd.MM.yyyy - HH:mm'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="content">
+                    <th mat-header-cell *matHeaderCellDef> CONTENT </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button class="btn" mat-button (click)="openMealPlanDialog(element.mealPlan)" style="margin-top: 10px;">
+                            CONTENT
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<ng-template #mealPlanDialog let-data>
+  <h2 mat-dialog-title>Meal plan</h2>
+
+  <mat-dialog-content>
+    <pre style="white-space: pre-wrap;">{{ data }}</pre>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button class="btn" mat-button mat-dialog-close>Close</button>
+  </mat-dialog-actions>
+</ng-template>

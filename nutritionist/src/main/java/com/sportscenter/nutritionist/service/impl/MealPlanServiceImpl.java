@@ -1,6 +1,7 @@
 package com.sportscenter.nutritionist.service.impl;
 
 import com.sportscenter.nutritionist.PDF.PDFGeneratorService;
+import com.sportscenter.nutritionist.dto.mealPlan.CreatedMealPlanDto;
 import com.sportscenter.nutritionist.dto.mealPlan.NutritionistMealPlanDto;
 import com.sportscenter.nutritionist.email.EmailSenderService;
 import com.sportscenter.nutritionist.enums.Gender;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -1211,10 +1214,12 @@ public class MealPlanServiceImpl implements MealPlanService {
     }
 
     public void createMealPlan(NutritionistMealPlanDto dto) throws IOException, MessagingException {
+        Date now = new Date();
         NutritionistMealPlan plan = new NutritionistMealPlan();
         plan.setMealPlan(dto.getContent());
         plan.setNutritionistId(dto.getNutritionistId());
         plan.setPatientId(dto.getPatientId());
+        plan.setDateCreated(now);
         nutritionistMealPlanRepository.save(plan);
 
         Appointment a = appointmentRepository.findById(dto.getAppointmentId()).orElseThrow(() -> new RuntimeException("Appointment plan not found"));
@@ -1237,6 +1242,25 @@ public class MealPlanServiceImpl implements MealPlanService {
         pdfService.export1(pdfStream, text);
         System.out.println("PDF size: " + pdfStream.size());
         emailSenderService.sendEmailWithAttachment("nebitno", "Meal plan", "Your meal plan.", pdfStream);
+    }
+
+    @Override
+    public List<CreatedMealPlanDto> getCreatedNutritionistsMealPlans(int id){
+        List<NutritionistMealPlan> mealPlans = nutritionistMealPlanRepository.findAll();
+        List<NutritionistMealPlan> nutritionistMealPlans = new ArrayList<>();
+        List<CreatedMealPlanDto> dtos = new ArrayList<>();
+        for(NutritionistMealPlan mp : mealPlans){
+            if(mp.getNutritionistId() == id){
+                CreatedMealPlanDto dto = new CreatedMealPlanDto();
+                UserEntity patient = userRepository.findById(mp.getPatientId()).orElse(null);
+                dto.setMealPlan(mp.getMealPlan());
+                dto.setId(mp.getId());
+                dto.setDateCreated(mp.getDateCreated());
+                dto.setPatientFullName(patient.getName() + ' ' + patient.getLastname());
+                dtos.add(dto);
+            }
+        }
+        return dtos;
     }
 
 }

@@ -10,19 +10,42 @@ import { AdminService } from '../services/admin.service';
 })
 export class UnblockUserViewComponent {
   dataSource : any;
-  displayedColumns: string[] = ['id', 'username', 'name', 'lastname', 'email', 'penaltyPoints', 'unblock'];
+  displayedColumns: string[] = ['id', 'username', 'name', 'lastname', 'email', 'penaltyPoints', 'block', 'unblock'];
 
   constructor(private adminService : AdminService){}
 
   ngOnInit(){
-    this.getBlockedUsers();
+    //this.getBlockedUsers();
+    this.getAllUsers();
   }
 
-  getBlockedUsers(){
-    this.adminService.getBlockedUsers().subscribe(
+  getAllUsers(){
+    this.adminService.getAllUsers().subscribe(
       (data) =>{
         this.dataSource = data;
         console.log(this.dataSource);
+      },
+      (error) =>
+        alert("Error")
+    );
+  }
+
+  // getBlockedUsers(){
+  //   this.adminService.getBlockedUsers().subscribe(
+  //     (data) =>{
+  //       this.dataSource = data;
+  //       console.log(this.dataSource);
+  //     },
+  //     (error) =>
+  //       alert("Error")
+  //   );
+  // }
+
+  block(element : any){
+    this.adminService.blockNutritionist(element.id).subscribe(
+    (data) =>{
+        alert("User ulocked!")
+        this.getAllUsers();
       },
       (error) =>
         alert("Error")
@@ -33,7 +56,7 @@ export class UnblockUserViewComponent {
     this.adminService.unblockUser(element.id).subscribe(
     (data) =>{
         alert("User unblocked!")
-        this.getBlockedUsers();
+        this.getAllUsers();
       },
       (error) =>
         alert("Error")

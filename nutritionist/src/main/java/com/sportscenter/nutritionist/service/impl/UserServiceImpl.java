@@ -260,4 +260,30 @@ public class UserServiceImpl implements UserService {
         return dtos;
     }
 
+    public List<UnblockUserDto> getAllUsers(){
+        List<UserEntity> patients = userRepository.findAllPatients();
+        List<UserEntity> nutritionists = userRepository.findAllNutritionists();
+        List<UnblockUserDto> dtos = new ArrayList<>();
+
+        setDto(patients, dtos);
+
+        setDto(nutritionists, dtos);
+
+        return dtos;
+    }
+
+    private void setDto(List<UserEntity> nutritionists, List<UnblockUserDto> dtos) {
+        for(UserEntity u : nutritionists){
+            UnblockUserDto dto = new UnblockUserDto();
+            dto.setId(u.getId());
+            dto.setName(u.getName());
+            dto.setLastName(u.getLastname());
+            dto.setUsername(u.getUsername());
+            dto.setEmail(u.getEmail());
+            dto.setPenaltyPoints(u.getPenaltyPoints());
+            dto.setBlocked(u.isBlocked());
+            dtos.add(dto);
+        }
+    }
+
 }

@@ -76,7 +76,10 @@ export class CreateMealPlanPatientViewComponent {
 
   Snack: 
 
-  Dinner: `;
+  Dinner: 
+  ---------------
+  WEEKS : 
+  `;
 
   appointmentId!: number;
   patientId! : number;

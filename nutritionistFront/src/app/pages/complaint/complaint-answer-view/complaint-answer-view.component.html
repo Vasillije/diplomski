@@ -29,7 +29,11 @@
             <form #complaintForm="ngForm" (ngSubmit)="answerComplaint(complaintForm.value)">
                 <mat-form-field class="inp">
                     <mat-label>Your Answer</mat-label>
-                    <textarea matInput name="answer" ngModel placeholder="Type your response here..." required></textarea>
+                    <textarea matInput name="answer" ngModel 
+                      placeholder="Type your response here..." 
+                      required
+                      rows="8"> <!-- Додај овај атрибут -->
+            </textarea>
                 </mat-form-field>
                 
                 <div class="button-group">

@@ -4,5 +4,6 @@ export interface UnblockUsersDto{
     name : string,
     lastName : string,
     email : string,
-    penaltyPoints : number
+    penaltyPoints : number,
+    isBlocked : boolean
 }

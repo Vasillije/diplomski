@@ -13,7 +13,7 @@
             <form #complaintForm="ngForm" (ngSubmit)="makeComplaint(complaintForm.value)">
                 <mat-form-field class="inp">
                     <mat-label>Make your complaint</mat-label>
-                    <textarea matInput name="complaint" ngModel></textarea>
+                    <textarea matInput name="complaint" ngModel rows="8"></textarea>
                 </mat-form-field>
                 
                 <div class="button-container">

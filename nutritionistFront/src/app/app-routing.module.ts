@@ -23,6 +23,7 @@ import { UserHealthInfoComponent } from './pages/user-profile/user-health-info/u
 import { BookAppointmentNutritionistViewComponent } from './pages/appointment/book-appointment-nutritionist-view/book-appointment-nutritionist-view.component';
 import { PreliminaryNutritionPlanViewComponent } from './pages/meal-plan/preliminary-nutrition-plan-view/preliminary-nutrition-plan-view.component';
 import { PreliminaryPlanGuard } from './guards/preliminary-plan.guard';
+import { CreatedMealPlanViewComponent } from './pages/meal-plan/created-meal-plan-view/created-meal-plan-view.component';
 
 const routes: Routes = [
   { path : 'login', component : LoginComponent },
@@ -44,6 +45,7 @@ const routes: Routes = [
   { path : 'create-appointment-view', component : CreateAppointmentViewComponent },
   { path : 'answered-nutritionist-complaints-view', component : AnsweredNutritionistComplaintsViewComponent },
   { path : 'user-health-info/:id', component : UserHealthInfoComponent },
+  { path : 'created-meal-plan-view', component : CreatedMealPlanViewComponent},
   { path : 'preliminary-nutrition-plan-view', component : PreliminaryNutritionPlanViewComponent, canActivate: [PreliminaryPlanGuard] },
 
 ];

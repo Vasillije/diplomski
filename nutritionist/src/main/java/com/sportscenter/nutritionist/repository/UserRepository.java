@@ -12,4 +12,6 @@ public interface UserRepository  extends JpaRepository<UserEntity, Integer> {
     Boolean existsByUsername(String username);
     @Query("SELECT u FROM UserEntity u JOIN u.roles r WHERE r.name = 'PATIENT'")
     List<UserEntity> findAllPatients();
+    @Query("SELECT u FROM UserEntity u JOIN u.roles r WHERE r.name = 'NUTRITIONIST'")
+    List<UserEntity> findAllNutritionists();
 }

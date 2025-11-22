@@ -24,4 +24,5 @@ public interface UserService {
     public PatientInfoDto getPatientsInfo(int id);
     public boolean hasPreliminaryNutritionPlan(int id);
     public List<PatientFullNameDto> getPatientFullNames();
+    public List<UnblockUserDto> getAllUsers();
 }

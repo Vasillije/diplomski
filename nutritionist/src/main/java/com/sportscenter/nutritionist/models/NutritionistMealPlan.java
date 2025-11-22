@@ -1,9 +1,12 @@
 package com.sportscenter.nutritionist.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Entity
 @Data
@@ -16,8 +19,9 @@ public class NutritionistMealPlan {
     public int id;
     public int nutritionistId;
     public int patientId;
-
     @Lob
     @Column(columnDefinition = "TEXT")
     private String mealPlan;
+    @Nullable
+    private Date dateCreated;
 }
