@@ -53,8 +53,16 @@ export class AppointmentService {
     return this.http.post<void>("api/appointment/cancelAppointmentNutritionist", id);
   }
   
-  getAppointmentsByDate(date : string){
-    return this.http.get<AppointmentsByDateDto[]>("api/appointment/getAppointmentsByDate/"+date)
+  getAppointmentsByDate(date: string, id: number) {
+    return this.http.get<AppointmentsByDateDto[]>(
+      `api/appointment/getAppointmentsByDate`,
+      {
+        params: {
+          date: date,
+          id: id
+        }
+      }
+    );
   }
 
   createDailyAppointments(date : string, nutritionistId : number): Observable<any>{

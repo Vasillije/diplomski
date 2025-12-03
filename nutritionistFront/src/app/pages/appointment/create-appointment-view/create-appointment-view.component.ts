@@ -4,6 +4,7 @@ import { LoginService } from '../../login/service/login.service';
 import { AppointmentService } from '../services/appointment.service';
 import { Router } from '@angular/router';
 import { CreateAppointmentDto } from '../interfaces/CreateAppointmentDto';
+import { DateDto } from '../interfaces/DateDto';
 
 @Component({
   selector: 'app-create-appointment-view',
@@ -82,7 +83,7 @@ export class CreateAppointmentViewComponent {
           const dateString = appointmentDate.toISOString().split('T')[0];
           
           // Ponovo učitaj termine za taj datum
-          this.getAppointmentsByDate(dateString);
+          this.getAppointmentsByDate(dateString, this.loginService.getUserId()!);
             alert("Appointment created successfully");
           },
           (error) => 
@@ -112,8 +113,8 @@ export class CreateAppointmentViewComponent {
     );
    }
 
-  getAppointmentsByDate(date: string) {
-  this.appointmentService.getAppointmentsByDate(date).subscribe(
+  getAppointmentsByDate(date: string, id : number) {
+  this.appointmentService.getAppointmentsByDate(date, id).subscribe(
     (data) => {
       this.patientFullName = [];
       this.appointmentType = [];
@@ -166,7 +167,7 @@ formatDuration(duration: number): string {
     const date = new Date(event.value);
     date.setDate(date.getDate() + 1);
     const selectedDate = date.toISOString().split('T')[0];
-    this.getAppointmentsByDate(selectedDate);
+    this.getAppointmentsByDate(selectedDate, this.loginService.getUserId()!);
   }
 
   discard(result : any){
@@ -189,7 +190,7 @@ formatDuration(duration: number): string {
         alert("Daily appointments created successfully");
         const d = result.appointmentDate;
         const date = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}`;
-        this.getAppointmentsByDate(date);
+        this.getAppointmentsByDate(date, this.loginService.getUserId()!);
       },
       (error) => 
         alert("There was an error creating daily appointments")
@@ -202,7 +203,7 @@ formatDuration(duration: number): string {
          alert("Appointment canceled");
          console.log(typeof(element.date));
          var date = element.date.toISOString();
-         this.getAppointmentsByDate(date);
+         this.getAppointmentsByDate(date, this.loginService.getUserId()!);
        },
        (error) =>
          alert("Could not cancel appointment")

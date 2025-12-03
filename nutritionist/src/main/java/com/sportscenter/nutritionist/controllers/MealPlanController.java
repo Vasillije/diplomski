@@ -35,6 +35,12 @@ public class MealPlanController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("generateMealPlanHardcoded")
+    public ResponseEntity<Void> generateMealPlanHardcoded(@RequestBody int id) throws MessagingException, IOException {
+        mealPlanService.generateMealPlanHardcoded(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("createMealPlan")
     public ResponseEntity<Void> createMealPlan(@RequestBody NutritionistMealPlanDto dto) throws MessagingException, IOException {
         mealPlanService.createMealPlan(dto);

@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface MealPlanService {
     public void generateMealPlan(int userId) throws MessagingException, IOException;
+    public void generateMealPlanHardcoded(int userId) throws MessagingException, IOException;
     public void createMealPlan(NutritionistMealPlanDto dto) throws IOException, MessagingException;
     public List<CreatedMealPlanDto> getCreatedNutritionistsMealPlans(int id);
 }

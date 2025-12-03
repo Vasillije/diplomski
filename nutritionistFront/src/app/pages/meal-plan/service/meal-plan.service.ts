@@ -15,7 +15,7 @@ export class MealPlanService {
   examination : string = '';
 
   generateMealPlan(userId : number){
-    return this.http.post<void>('/api/mealPlan/generateMealPlan', userId);
+    return this.http.post<void>('/api/mealPlan/generateMealPlanHardcoded', userId);
   }
 
   getPastBookedExaminationsByNutritionistId(id : number){

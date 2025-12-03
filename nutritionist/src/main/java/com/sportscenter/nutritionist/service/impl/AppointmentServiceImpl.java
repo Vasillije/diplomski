@@ -313,8 +313,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentsByDateDto> getAppointmentsByDate(String date){
+    public List<AppointmentsByDateDto> getAppointmentsByDate(String date, int id){
         List<Appointment> appointments = appointmentRepository.findAll();
+        List<Appointment> nutritionistAppointments = new ArrayList<>();
+
+        for(Appointment a : appointments){
+            if(a.getNutritionistId() == id){
+                nutritionistAppointments.add(a);
+            }
+        }
+
         List<AppointmentsByDateDto> dtos = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date realDate;
@@ -324,7 +332,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new RuntimeException("Nevalidan format datuma, očekuje se yyyy-MM-dd");
         }
 
-        for (Appointment a : appointments) {
+        for (Appointment a : nutritionistAppointments) {
             String appointmentDateStr = sdf.format(a.getDateAndTime());
             String filterDateStr = sdf.format(realDate);
 

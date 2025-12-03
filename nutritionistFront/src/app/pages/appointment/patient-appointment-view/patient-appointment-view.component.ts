@@ -280,29 +280,36 @@ export class PatientAppointmentViewComponent {
     }
   }
 
-  filterByName(result : any){
-    if (result.username && result.username.trim() !== ''){
+  filterByName(result: any) {
+    if (result.username && result.username.trim() !== '') {
+      const search = result.username.trim().toLowerCase();
+
       let filteredList: PatientAppointmentDto[] = [];
-      for (let i = 0; i < this.allMergedAppointments.length; i++){
-        const fullName = (this.allAppointments[i].nutritionistFullName).toLowerCase();
-        
-        if (fullName.includes(result.username)) {
+
+      for (let i = 0; i < this.allMergedAppointments.length; i++) {
+        const fullName = this.allMergedAppointments[i].nutritionistFullName.toLowerCase();
+
+        if (fullName.includes(search)) {
           filteredList.push(this.allMergedAppointments[i]);
         }
       }
-    
+
       const futureAppointments = filteredList
         .filter(a => new Date(a.date) > this.currentDate)
-        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()); // rastuće
-    
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
       const pastAppointments = filteredList
         .filter(a => new Date(a.date) <= this.currentDate)
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()); // opadajuće
-    
-      // spajanje budućih i prošlih
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
       this.dataSource = [...futureAppointments, ...pastAppointments];
+    } else {
+      // ako je polje prazno, vrati sve
+      this.dataSource = [...this.allMergedAppointments];
+      this.sortByDate();
     }
   }
+
 
   getFutureAppointments(){
     let listToFilter: PatientAppointmentDto[] = [...this.allMergedAppointments];

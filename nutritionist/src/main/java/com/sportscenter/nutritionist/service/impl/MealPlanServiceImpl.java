@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1261,6 +1262,81 @@ public class MealPlanServiceImpl implements MealPlanService {
             }
         }
         return dtos;
+    }
+
+    @Override
+    public void generateMealPlanHardcoded(int userId) throws MessagingException, IOException {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String mealPlan =
+                "Meal plan\n" +
+                        "Monday:\n" +
+                        "Breakfast:\n" +
+                        "oatmeal 377 grams low fat milk 157 grams banana 94 grams\n" +
+                        "Lunch:\n" +
+                        "turkey burger 587 grams leek 188 grams\n" +
+                        "Dinner:\n" +
+                        "chicken drumstick 273 grams kinoa 34 grams\n" +
+                        "\nTuesday:\n" +
+                        "Breakfast:\n" +
+                        "boiled eggs 209 grams greek yogurt 118 grams bread 59 grams\n" +
+                        "Lunch:\n" +
+                        "chicken breasts 349 grams integral rice 115 grams\n" +
+                        "Dinner:\n" +
+                        "tuna salad 384 grams\n" +
+                        "\nWednesday:\n" +
+                        "Breakfast:\n" +
+                        "balans+ 317 grams\n" +
+                        "Lunch:\n" +
+                        "peas with chicken 599 grams\n" +
+                        "Dinner:\n" +
+                        "ella cheese 170 grams smoked chicken breasts 254 grams bread 95 grams\n" +
+                        "\nThursday:\n" +
+                        "Breakfast:\n" +
+                        "omlet with vegetables 244 grams yogurt 309 grams\n" +
+                        "Lunch:\n" +
+                        "salmon 234 grams integral rice 92 grams spinach 91 grams\n" +
+                        "Dinner:\n" +
+                        "kuskus 112 grams ella cheese 170 grams boiled eggs 230 grams pepper 56 grams tomato 87 grams\n" +
+                        "\nFriday:\n" +
+                        "Breakfast:\n" +
+                        "proja with cheese 196 grams yogurt 206 grams\n" +
+                        "Lunch:\n" +
+                        "chicken breasts 314 grams pasta 101 grams cucumber 203 grams pepper 98 grams tomato 153 grams\n" +
+                        "Dinner:\n" +
+                        "tortilla 64 grams omlet with vegetables 104 grams salmon 91 grams ella cheese 85 grams\n" +
+                        "\nSaturday:\n" +
+                        "Breakfast:\n" +
+                        "choco oatmeal 130 grams banana 141 grams\n" +
+                        "Lunch:\n" +
+                        "tortilla 100 grams chicken breasts 384 grams ella cheese 113 grams\n" +
+                        "Dinner:\n" +
+                        "chicken drumstick 239 grams zucchini 185 grams bread 59 grams\n" +
+                        "\nSunday:\n" +
+                        "Breakfast:\n" +
+                        "polenta 370 grams ella cheese 317 grams\n" +
+                        "Lunch:\n" +
+                        "avocado 222 grams bread 63 grams tomato 582 grams cucumber 749 grams salmon 142 grams\n" +
+                        "Dinner:\n" +
+                        "integral rice 48 grams chicken breasts 367 grams champignons 57 grams";
+
+        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
+
+        // KORISTI već uvezani bean, ne new:
+        pdfGeneratorService.export1(pdfStream, mealPlan);
+
+        System.out.println("PDF size: " + pdfStream.size());
+
+        emailSenderService.sendEmailWithAttachment(
+                user.getEmail(),          // umesto "nebitno"
+                "Meal plan",
+                "Your meal plan.",
+                pdfStream
+        );
+
+        user.setHasPreliminaryPlan(true);
+        userRepository.save(user);
     }
 
 }

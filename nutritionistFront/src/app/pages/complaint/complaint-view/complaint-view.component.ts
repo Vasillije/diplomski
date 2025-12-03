@@ -59,6 +59,11 @@ export class ComplaintViewComponent {
       return;
     }
 
+    if(dto.content.length == 0){
+      alert("Cannot send empty complaint!");
+      return;
+    }
+
     this.complaintService.makeComplaint(dto).subscribe(
       (data) => {
         alert("Complaint has been sent.");
@@ -70,7 +75,6 @@ export class ComplaintViewComponent {
   }
 
   cancel(){
-    alert("Changes cancelled");
     this.router.navigate(["patient-appointment-view"]);
   }
 

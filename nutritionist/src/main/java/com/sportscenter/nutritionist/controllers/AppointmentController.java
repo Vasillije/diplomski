@@ -85,10 +85,14 @@ public class AppointmentController {
         return new ResponseEntity<>(appointmentService.getPastBookedExaminationsByNutritionistId(id), HttpStatus.OK);
     }
 
-    @GetMapping("getAppointmentsByDate/{date}")
-    public ResponseEntity<List<AppointmentsByDateDto>> getAppointmentsByDate(@PathVariable String date){
-        return new ResponseEntity<>(appointmentService.getAppointmentsByDate(date), HttpStatus.OK);
+    @GetMapping("getAppointmentsByDate")
+    public ResponseEntity<List<AppointmentsByDateDto>> getAppointmentsByDate(
+            @RequestParam String date,
+            @RequestParam int id
+    ) {
+        return new ResponseEntity<>(appointmentService.getAppointmentsByDate(date, id), HttpStatus.OK);
     }
+
 
     @PostMapping("book")
     public ResponseEntity<Void> book(@RequestBody BookDto dto){
